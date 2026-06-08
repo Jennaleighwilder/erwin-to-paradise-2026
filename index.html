@@ -571,6 +571,7 @@ footer .sig{font-family:'Playfair Display',serif;font-style:italic;color:var(--g
       <div class="lg-row"><span class="lg-dot" style="background:#5cb85c"></span>Boondock</div>
       <div class="lg-row"><span class="lg-dot" style="background:#5bc0de"></span>Transit</div>
       <div class="lg-row"><span class="lg-dot" style="background:#e8a547"></span>Start / End</div>
+      <div class="lg-row"><span class="lg-dot" style="background:#ff5b8a"></span>AI / tech hub</div>
     </div>
   </div>
 </div>
@@ -714,8 +715,19 @@ footer .sig{font-family:'Playfair Display',serif;font-style:italic;color:var(--g
   <p style="color:var(--fog);font-size:.85rem;margin-bottom:1.5rem;font-style:italic;font-family:'Playfair Display',serif">Batch these before you leave. Each day you only have to add one photo from that day and hit post. Each post is a hook + an AI architecture insight drawn from what you're physically looking at.</p>
   <div id="content-cal" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:1rem;margin-bottom:3rem"></div>
 
-  <h3 style="font-family:'Playfair Display',serif;font-size:1.5rem;color:var(--gold);margin:2rem 0 1rem;font-weight:400">Networking corridor · where to actually meet humans</h3>
-  <p style="color:var(--fog);font-size:.85rem;margin-bottom:1.5rem;font-style:italic;font-family:'Playfair Display',serif">Each town has one or two real nodes — chambers of commerce, coworking, libraries with Wi-Fi, small-business networks. Schedule 20-minute coffees a week ahead.</p>
+  <h3 style="font-family:'Playfair Display',serif;font-size:1.5rem;color:var(--gold);margin:2rem 0 1rem;font-weight:400">AI nodes on the route · real labs, universities, hubs</h3>
+  <p style="color:var(--fog);font-size:.85rem;margin-bottom:1.5rem;font-style:italic;font-family:'Playfair Display',serif">Your I-40 → I-90 corridor passes within range of one of the world's fastest supercomputers, two quantum optics labs, and the densest AI VC scene between Austin and Seattle. Mapped below.</p>
+  <div class="dash" id="ainodes"></div>
+
+  <h3 style="font-family:'Playfair Display',serif;font-size:1.5rem;color:var(--gold);margin:2.5rem 0 1rem;font-weight:400">Recurring AI / tech meetups & summer 2026 events</h3>
+  <p style="color:var(--fog);font-size:.85rem;margin-bottom:1.5rem;font-style:italic;font-family:'Playfair Display',serif">Check these RIGHT NOW for events that land on dates you'll be in town. Meetup.com, Eventbrite, Luma. RSVP for the ones that match — they cost nothing and put you in a room.</p>
+  <div class="dash" id="meetups"></div>
+
+  <h3 style="font-family:'Playfair Display',serif;font-size:1.5rem;color:var(--gold);margin:2.5rem 0 1rem;font-weight:400">Guerrilla tactics · per stop</h3>
+  <p style="color:var(--fog);font-size:.85rem;margin-bottom:1.5rem;font-style:italic;font-family:'Playfair Display',serif">What you actually DO at each stop. Stickers, QR drops, trailhead registers, library boards, coffee-shop bulletin boards, the right human to ask "who runs tech around here."</p>
+  <div id="guerrilla" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:1rem;margin-bottom:2rem"></div>
+
+  <h3 style="font-family:'Playfair Display',serif;font-size:1.5rem;color:var(--gold);margin:2.5rem 0 1rem;font-weight:400">General networking corridor · chambers, coworking, Wi-Fi nodes</h3>
   <div class="dash" id="netnodes"></div>
 
   <div class="divider" style="height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:4rem 0"></div>
@@ -1189,6 +1201,60 @@ const CONTENT_CAL = [
   { day:'Jul 18', loc:'End of trip', hook:'"21 days. 21 posts. Here\'s the lesson list."', insight:'Wrap-up carousel. One image + one lesson per day. Pin to top. This becomes a portfolio centerpiece.', tags:'#BuildInPublic #FieldDeployment'}
 ];
 
+const AI_NODES = [
+  { tag:'Day 1 · TN · ~70 mi from Erwin', name:'Oak Ridge National Lab — Frontier supercomputer · AI for Science', url:'https://www.ornl.gov/onramp', why:'World\'s first exascale machine. AI for Science Initiative. Can\'t walk in but the American Museum of Science & Energy in Oak Ridge has public tours + a researcher Q&A program.'},
+  { tag:'Day 1 · TN', name:'UT Knoxville Tickle College of Engineering', url:'https://tickle.utk.edu/', why:'Stop by Min Kao Engineering Bldg. CS dept has open seminar series. Bulletin boards in lobby = sticker drop gold.'},
+  { tag:'Day 1 · TN', name:'Knoxville Entrepreneur Center', url:'https://knoxec.com/', why:'Coworking + events. Innov865 startup week is theirs. Drop in, $0 to walk the lobby.'},
+  { tag:'Day 2 detour · IL', name:'NCSA — Univ of Illinois Urbana-Champaign', url:'https://www.ncsa.illinois.edu/', why:'Blue Waters supercomputer site. Public visitor center. 3-hour detour north of Shawnee NF if you have a half-day.'},
+  { tag:'Day 3 · MO', name:'Cortex Innovation Community · St Louis', url:'https://cortexstl.org/', why:'250-acre innovation district. 425+ startups. The lobby is open. Coffee shop inside is a networking gold mine.'},
+  { tag:'Day 3 · MO', name:'WashU McKelvey School of Engineering · CS', url:'https://cse.wustl.edu/', why:'Major AI research. Open public seminars often during summer.'},
+  { tag:'Day 4 · SD', name:'South Dakota Mines · Data Science / AI', url:'https://www.sdsmt.edu/', why:'Rapid City. Strong applied data science program. Open library + cafeteria. Tech meetups happen here.'},
+  { tag:'Day 8 · WY', name:'Univ of Wyoming · School of Computing', url:'https://www.uwyo.edu/soc/', why:'Laramie. AI/ML group. Detour south from I-90 if it lines up with a meetup date.'},
+  { tag:'Day 11 · MT 🔥', name:'MSU Bozeman · Optical Technology Center + Spectrum Lab', url:'https://www.montana.edu/optics/', why:'Quantum photonics & quantum AI. World-class lab right downtown. Open campus, public seminars all summer.'},
+  { tag:'Day 11 · MT 🔥', name:'MSU Innovation Campus', url:'https://innovationcampus.msu.montana.edu/', why:'Startup space + research collab. Open campus. Coffee shop on site.'},
+  { tag:'Day 11 · MT', name:'TechLink Center · MSU', url:'https://techlinkcenter.org/', why:'DoD tech transfer hub. Defense AI / dual-use tech. Quietly massive — worth a call ahead.'},
+  { tag:'Day 11 · MT', name:'Foundry Bozeman · coworking + accelerator', url:'https://foundrybozeman.com/', why:'Day pass available. The Bozeman tech scene drinks coffee here.'},
+  { tag:'Day 11 · MT', name:'Bozeman Innovation Center', url:'https://www.bozemaninnovationcenter.com/', why:'Startup hub right on Main St. Walk in. Talk to the receptionist — they\'re connectors.'},
+  { tag:'Day 19 · MT 🔥', name:'UM Missoula · Blackstone LaunchPad', url:'https://www.umt.edu/launchpad/', why:'Student entrepreneurship hub. Open to community. Office hours all summer.'},
+  { tag:'Day 19 · MT', name:'UM Mansfield Center · Asia + tech policy', url:'https://www.umt.edu/mansfield/', why:'Quiet but mighty. Tech-policy crowd. Public events often free.'},
+  { tag:'Day 19 · MT', name:'onX Maps HQ · Missoula', url:'https://www.onxmaps.com/careers', why:'Big Montana tech employer (mapping/GPS). Open to coffee with founders if you reach out cold.'},
+  { tag:'Day 19 · MT', name:'Submittable HQ · Missoula', url:'https://www.submittable.com/', why:'B-corp SaaS, very mission-driven culture. Receptive to indie founders dropping in.'},
+  { tag:'Bozeman VCs · book ahead', name:'Next Frontier Capital · MT-focused VC', url:'https://nextfrontiercapital.com/', why:'The "if you want to raise in MT" people. Bozeman + Missoula offices.'},
+  { tag:'Bozeman VCs', name:'Frontier Fund (Bozeman)', url:'https://frontier.fund/', why:'Small but active early-stage. Founder-friendly intros.'},
+  { tag:'Bozeman VCs', name:'Right Stuff Equity', url:'https://www.rightstuffequity.com/', why:'Boutique. Hands-on. Worth a 15-min Zoom while you\'re in town.'}
+];
+
+const MEETUPS = [
+  { tag:'Knoxville · Day 1', name:'Knoxville Data + AI Meetup', url:'https://www.meetup.com/find/?keywords=ai&location=us--tn--knoxville', why:'Search Meetup.com Knoxville for "AI" / "data". Several active groups.'},
+  { tag:'Nashville · short detour', name:'Nashville AI · Nashville Data Science', url:'https://www.meetup.com/find/?keywords=ai&location=us--tn--nashville', why:'Largest in TN. If you swing south on Day 1, check for an event.'},
+  { tag:'St Louis · Day 3', name:'STL Tech Meetups · search Eventbrite', url:'https://www.eventbrite.com/d/mo--saint-louis/ai/', why:'Cortex hosts events constantly. Eventbrite is the source of truth.'},
+  { tag:'Sioux Falls · Day 4', name:'Sioux Falls Tech meetup scene', url:'https://www.meetup.com/find/?keywords=tech&location=us--sd--sioux-falls', why:'Smaller but real. Look for "Sioux Falls Developers."'},
+  { tag:'Rapid City · Day 4', name:'Black Hills tech meetups', url:'https://www.meetup.com/find/?keywords=ai&location=us--sd--rapid-city', why:'SD Mines + small Rapid City group. Often library-hosted.'},
+  { tag:'Bozeman · Day 11 🔥', name:'Big Sky AI · annual conference', url:'https://www.bigskyaiconference.com/', why:'Annual MT AI conference. Verify summer 2026 date. The single best place to be a founder in MT for one day.'},
+  { tag:'Bozeman · Day 11', name:'Bozeman Software Developer Meetup', url:'https://www.meetup.com/bozeman-software-developers-meetup-group/', why:'Monthly. Active. Verify July date.'},
+  { tag:'Bozeman · Day 11', name:'Montana AI · cross-MT group', url:'https://www.meetup.com/find/?keywords=ai&location=us--mt--bozeman', why:'AI/ML focused. Often hybrid Bozeman/Missoula.'},
+  { tag:'Missoula · Day 19', name:'Missoula Software Developers', url:'https://www.meetup.com/missoula-software-developers-meetup/', why:'Monthly. Founder-friendly. Imagine Nation Brewing is a frequent venue.'},
+  { tag:'Missoula · Day 19', name:'UM events calendar · open seminars', url:'https://www.umt.edu/events/', why:'Always something happening. Filter for tech/data/AI.'},
+  { tag:'Online recurring', name:'AI Tinkerers · weekly virtual', url:'https://aitinkerers.org/', why:'If no local event hits, attend their weekly virtual from a coffee shop. Best AI builders community right now.'},
+  { tag:'Online recurring', name:'Latent Space podcast meetups', url:'https://www.latent.space/', why:'They organize IRL meetups in major cities — check if any align with your route dates.'}
+];
+
+const GUERRILLA = [
+  { tag:'Day 1 · Erwin → Big South Fork', moves:['Print 200 WRENTECH stickers with QR → portfolio + "AI for your business?"','Drop sticker on UT Knoxville Tickle College of Engineering bulletin board (Min Kao Bldg lobby)','Knoxville Entrepreneur Center · walk in, ask receptionist who runs their AI events','Library tech librarian at Erwin Public Library — leave a one-pager about local AI services']},
+  { tag:'Day 2 · Garden of the Gods', moves:['Shawnee NF trailhead register — sign with WRENTECH.com under your name','Marion IL coffee shops — Aldi-area cafes have community boards','Carbondale (15 min away) has SIU campus — quick sticker run on the engineering bldg']},
+  { tag:'Day 3 · MO transit', moves:['Cortex Innovation Community St Louis · the lobby coffee shop is open · sit and work for 2 hours','Pop into WashU McKelvey lobby (5 min) · their seminar boards','Drop into a small-town hardware store · ask the owner what software they hate']},
+  { tag:'Day 4-5 · Badlands / Wall', moves:['Wall Drug bulletin board has community section · classic placement','SD Mines Rapid City library — open to public, leave a one-pager','Black Hills State Spearfish if you swing through — small CS dept, super accessible','Every visitor center has a guest book · sign with your URL']},
+  { tag:'Day 6 · Medora / TRNP', moves:['Medora is tiny but tourist-heavy — drop QR cards at the visitor center','North Dakota tourism office — ask about their digital pain (it\'s real)','TRNP ranger station has community board — bear-aware = AI services available too']},
+  { tag:'Day 7 · Devils Tower', moves:['Devils Tower visitor center book · QR sticker INSIDE the gift shop with permission','Hulett WY (10 mi away) has a tiny chamber — easiest small-town intro of the trip','Belle Fourche Campground host conversation — these people know everyone passing through']},
+  { tag:'Day 8-9 · Bighorns / Sheridan', moves:['Sheridan WY has a real downtown · The Sheridan Press will publish a "tech road tripper" interview for free if you pitch them','Sheridan College CS program is small but real','Bighorn NF ranger stations — drop one-pager on community board']},
+  { tag:'Day 10 · Beartooth → Red Lodge', moves:['Red Lodge has Beartooth Cafe + several galleries — community boards everywhere','Talk to Beartooth Highway road crew · they\'re bored and connected','Cooke City MT — tiny town, every business owner knows every other one. One conversation = whole town hears about you.']},
+  { tag:'Day 11 · Bozeman 🔥', moves:['MSU Optical Tech Center · walk the lobby · they have public posters / seminars','Foundry Bozeman day pass ($20-30) · work there 4 hours · meet 5 people','Bozeman Innovation Center · drop in, ask for a tour','Wild Joe\'s Coffee Spot on Main · Bozeman tech crowd hangs there','Pre-book a 20-min coffee with one VC (Next Frontier, Frontier Fund, or Right Stuff)']},
+  { tag:'Day 12-13 · Glacier', moves:['Apgar Village visitor center — community board','Whitefish has Whitefish Theatre Co. and Casey\'s — touristy but tech-adjacent','Polebridge Mercantile — owners know everyone in NW MT','Backcountry register at Two Medicine — sign with WRENTECH URL']},
+  { tag:'Day 14 · Arrival Paradise / Plains', moves:['Plains MT laundromat conversation — these are the best networking places in rural MT','Quinn\'s Hot Springs Resort has a community board + a gift shop','Talk to Sanders County Ledger reporter — small paper, easy press']},
+  { tag:'Days 16-20 · Paradise base', moves:['<b>Missoula day (Day 19) is the win</b>: 4-hour visit gets you onX Maps, Submittable, Blackstone LaunchPad, Imagine Nation Brewing, Florence Coffee','Hamilton farmers market Saturday — talk to every vendor about their booking/website pain','Hamilton MT actually has a small startup scene — the Bitterroot is the new hidden tech valley','Bookstores: Fact & Fiction (Missoula), Country Bookshelf (Bozeman) — leave a printed zine on AI for rural businesses']},
+  { tag:'Across all stops · always', moves:['Every coffee shop you work from: leave a printed one-pager AND tip well — barista remembers you','QR sticker on the back of every business card you hand out','Sign every trail register, every camp host log, every visitor book — small URL signature','Geo-tag every Instagram post with the actual location · the algorithm rewards real places','Hashtag every X post #BuildInPublic + the location · MT/WY founders search those']}
+];
+
 const NETNODES = [
   { tag:'Rapid City · SD · Day 4', name:'Elevate Rapid City · regional chamber', url:'https://www.elevaterapidcity.com/'},
   { tag:'Rapid City · Library', name:'RC Public Library · Wi-Fi work day', url:'https://rapidcitylibrary.org/'},
@@ -1262,7 +1328,18 @@ const MAP_PINS = [
   { lat:48.487, lng:-113.367, name:'Two Medicine · Glacier', type:'anchor', day:'Day 12', url:'https://www.recreation.gov/camping/campgrounds/232493' },
   { lat:48.799, lng:-113.657, name:'Many Glacier', type:'anchor', day:'Day 13', url:'https://www.nps.gov/glac/' },
   { lat:48.456, lng:-115.763, name:'Kootenai Falls', type:'transit', day:'Day 14', url:'https://www.fs.usda.gov/kootenai' },
-  { lat:47.383, lng:-114.799, name:'PARADISE, MT', type:'end', day:'Day 14 arrival', url:'#' }
+  { lat:47.383, lng:-114.799, name:'PARADISE, MT', type:'end', day:'Day 14 arrival', url:'#' },
+  // AI / TECH NODES on the route
+  { lat:35.932, lng:-84.311, name:'🤖 Oak Ridge National Lab · Frontier supercomputer', type:'ai', day:'Day 1 · ~70mi from Erwin', url:'https://www.ornl.gov/onramp' },
+  { lat:35.954, lng:-83.929, name:'🤖 UT Knoxville · Tickle Engineering', type:'ai', day:'Day 1', url:'https://tickle.utk.edu/' },
+  { lat:38.636, lng:-90.260, name:'🤖 Cortex Innovation Community, St Louis', type:'ai', day:'Day 3 transit', url:'https://cortexstl.org/' },
+  { lat:38.648, lng:-90.305, name:'🤖 WashU McKelvey CS', type:'ai', day:'Day 3', url:'https://cse.wustl.edu/' },
+  { lat:44.075, lng:-103.205, name:'🤖 South Dakota Mines · Data Science', type:'ai', day:'Day 4', url:'https://www.sdsmt.edu/' },
+  { lat:45.664, lng:-111.046, name:'🤖 MSU Bozeman · Optics & Quantum 🔥', type:'ai', day:'Day 11 area', url:'https://www.montana.edu/optics/' },
+  { lat:45.668, lng:-111.044, name:'🤖 Foundry Bozeman · coworking', type:'ai', day:'Day 11 area', url:'https://foundrybozeman.com/' },
+  { lat:46.860, lng:-113.985, name:'🤖 UM Missoula · Blackstone LaunchPad 🔥', type:'ai', day:'Day 19', url:'https://www.umt.edu/launchpad/' },
+  { lat:46.872, lng:-113.992, name:'🤖 onX Maps HQ · Missoula', type:'ai', day:'Day 19', url:'https://www.onxmaps.com/' },
+  { lat:46.871, lng:-113.995, name:'🤖 Submittable HQ · Missoula', type:'ai', day:'Day 19', url:'https://www.submittable.com/' }
 ];
 
 /* ============ RUNTIME ============ */
@@ -1340,13 +1417,17 @@ document.querySelectorAll('.nav-links a').forEach(a => {
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom:18, attribution:'© OpenStreetMap contributors'
   }).addTo(map);
-  const colors = { start:'#e8a547', anchor:'#c9a64c', boondock:'#5cb85c', transit:'#5bc0de', end:'#e8a547' };
+  const colors = { start:'#e8a547', anchor:'#c9a64c', boondock:'#5cb85c', transit:'#5bc0de', end:'#e8a547', ai:'#ff5b8a' };
   const path = [];
   MAP_PINS.forEach(p => {
     const big = p.type === 'anchor' || p.type === 'end' || p.type === 'start';
+    const isAi = p.type === 'ai';
     const m = L.circleMarker([p.lat, p.lng], {
-      radius: big ? 9 : 6, fillColor: colors[p.type], color:'#fff',
-      weight: big ? 2.5 : 1.5, fillOpacity:0.95
+      radius: isAi ? 7 : (big ? 9 : 6),
+      fillColor: colors[p.type], color: isAi ? '#fff' : '#fff',
+      weight: isAi ? 2 : (big ? 2.5 : 1.5),
+      fillOpacity: isAi ? 0.92 : 0.95,
+      dashArray: isAi ? '2,2' : null
     }).addTo(map);
     m.bindPopup(
       '<h4>'+p.name+'</h4>'+
@@ -1354,7 +1435,7 @@ document.querySelectorAll('.nav-links a').forEach(a => {
       '<div class="gps">'+p.lat.toFixed(4)+'° N, '+Math.abs(p.lng).toFixed(4)+'° W</div>'+
       (p.url !== '#' ? '<div style="margin-top:.5rem"><a href="'+p.url+'" target="_blank">Open link →</a></div>' : '')
     );
-    path.push([p.lat, p.lng]);
+    if(!isAi) path.push([p.lat, p.lng]);
   });
   L.polyline(path, { color:'#c9a64c', weight:2.5, opacity:0.9, dashArray:'4,4' }).addTo(map);
   map.fitBounds(path, { padding:[40,40] });
@@ -2046,6 +2127,45 @@ renderExpenses();
     a.href = d.url; a.target = '_blank';
     a.innerHTML = `<span class="dt">${d.tag}</span><span class="dn">${d.name} ↗</span>`;
     w.appendChild(a);
+  });
+})();
+
+// ============ AI NODES (with "why") ============
+(function(){
+  const w = document.getElementById('ainodes');
+  if(!w) return;
+  AI_NODES.forEach(d => {
+    const a = document.createElement('a');
+    a.href = d.url; a.target = '_blank';
+    a.innerHTML = `<span class="dt">${d.tag}</span><span class="dn">${d.name} ↗</span><span style="display:block;font-size:.74rem;color:var(--fog);margin-top:.4rem;line-height:1.45;font-style:italic">${d.why}</span>`;
+    w.appendChild(a);
+  });
+})();
+
+// ============ MEETUPS ============
+(function(){
+  const w = document.getElementById('meetups');
+  if(!w) return;
+  MEETUPS.forEach(d => {
+    const a = document.createElement('a');
+    a.href = d.url; a.target = '_blank';
+    a.innerHTML = `<span class="dt">${d.tag}</span><span class="dn">${d.name} ↗</span><span style="display:block;font-size:.74rem;color:var(--fog);margin-top:.4rem;line-height:1.45;font-style:italic">${d.why}</span>`;
+    w.appendChild(a);
+  });
+})();
+
+// ============ GUERRILLA ============
+(function(){
+  const w = document.getElementById('guerrilla');
+  if(!w) return;
+  GUERRILLA.forEach(g => {
+    const el = document.createElement('div');
+    el.style.cssText = 'background:linear-gradient(180deg,#0f1418,#0a0d10);border:1px solid #1a2018;border-left:3px solid var(--ember);padding:1.2rem;border-radius:4px';
+    el.innerHTML = `
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--gold);letter-spacing:.25em;text-transform:uppercase;margin-bottom:.7rem">${g.tag}</div>
+      <ul style="list-style:none;padding:0">${g.moves.map(m=>`<li style="font-size:.82rem;color:var(--cream);padding:.35rem 0 .35rem 1.2rem;position:relative;line-height:1.55"><span style="position:absolute;left:0;color:var(--ember)">▸</span>${m}</li>`).join('')}</ul>
+    `;
+    w.appendChild(el);
   });
 })();
 
