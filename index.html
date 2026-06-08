@@ -1,0 +1,2060 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>THE EXPEDITION · Erwin → Paradise · June 28 – July 18, 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://upload.wikimedia.org" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,900&family=JetBrains+Mono:wght@300;400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+  integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+<style>
+:root{
+  --void:#050708; --deep:#0a0d10; --char:#12161a; --slate:#1c2128;
+  --gold:#c9a64c; --ember:#e8a547; --amber:#f3c969; --rust:#b85c38;
+  --cream:#ede8db; --fog:#a8a294; --ash:#6b6558;
+  --safe:#5cb85c; --danger:#d9534f; --warn:#f0ad4e; --info:#5bc0de;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:var(--void);color:var(--cream);
+  overflow-x:hidden;line-height:1.55;font-weight:300}
+::selection{background:var(--gold);color:var(--void)}
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-track{background:var(--void)}
+::-webkit-scrollbar-thumb{background:var(--gold);border-radius:3px}
+img{display:block;max-width:100%}
+
+/* ===== LOADER ===== */
+#loader{position:fixed;inset:0;z-index:9999;background:#000;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  transition:opacity 1.2s ease,visibility 1.2s}
+#loader.gone{opacity:0;visibility:hidden;pointer-events:none}
+#loader::before{content:'';position:absolute;inset:0;
+  background:url('https://upload.wikimedia.org/wikipedia/commons/f/f6/Going-to-the-Sun_Road_-_Glacier_National_Park.jpg') center/cover;
+  opacity:.35;filter:saturate(.7) contrast(1.1)}
+.l-title{font-family:'Playfair Display',serif;font-size:clamp(2rem,5vw,3.8rem);
+  font-weight:400;letter-spacing:.35em;color:var(--gold);opacity:0;
+  animation:fadeIn 1.6s ease forwards;position:relative;z-index:1;text-shadow:0 2px 30px rgba(0,0,0,.9)}
+.l-sub{font-size:.65rem;letter-spacing:.55em;color:var(--cream);margin-top:1rem;
+  opacity:0;animation:fadeIn 1.6s ease .4s forwards;text-transform:uppercase;position:relative;z-index:1}
+.l-bar{width:240px;height:1px;background:rgba(255,255,255,.15);margin-top:2.2rem;
+  position:relative;overflow:hidden;z-index:1}
+.l-bar::after{content:'';position:absolute;left:-100%;top:0;width:100%;height:100%;
+  background:var(--gold);animation:slide 1.8s ease-in-out forwards}
+@keyframes fadeIn{to{opacity:1}}
+@keyframes slide{to{left:100%}}
+
+/* ===== KEN BURNS ===== */
+@keyframes kenburns{
+  0%{transform:scale(1.08) translate(0,0)}
+  50%{transform:scale(1.15) translate(-1%,-1.5%)}
+  100%{transform:scale(1.08) translate(1%,1%)}
+}
+
+/* ===== NAV ===== */
+nav{position:fixed;top:0;left:0;right:0;z-index:1000;
+  background:linear-gradient(180deg,rgba(0,0,0,.85),rgba(0,0,0,.3));
+  backdrop-filter:blur(8px);transition:transform .4s}
+nav.hidden{transform:translateY(-100%)}
+.nav-inner{max-width:1700px;margin:0 auto;padding:.9rem 1.5rem;
+  display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap}
+.nav-brand{font-family:'Playfair Display',serif;font-size:1rem;letter-spacing:.3em;color:var(--gold)}
+.nav-brand span{color:var(--cream)}
+.nav-links{display:flex;gap:1.3rem;font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;flex-wrap:wrap}
+.nav-links a{color:var(--cream);text-decoration:none;transition:color .2s;padding:.3rem 0;position:relative}
+.nav-links a:hover,.nav-links a.active{color:var(--gold)}
+.nav-links a.active::after{content:'';position:absolute;bottom:-2px;left:0;right:0;height:1px;background:var(--gold)}
+.countdown{font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--amber);letter-spacing:.15em}
+.countdown b{color:var(--gold);font-weight:700}
+
+/* ===== HERO ===== */
+.hero{position:relative;min-height:100vh;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;text-align:center;padding:6rem 1.5rem 4rem;overflow:hidden}
+.hero-bg{position:absolute;inset:0;z-index:0;overflow:hidden}
+.hero-bg img{width:100%;height:100%;object-fit:cover;animation:kenburns 28s ease-in-out infinite alternate}
+.hero-bg::after{content:'';position:absolute;inset:0;
+  background:linear-gradient(180deg,rgba(5,7,8,.55) 0%,rgba(5,7,8,.3) 40%,rgba(5,7,8,.95) 100%);}
+.hero-content{position:relative;z-index:1}
+.hero-meta{font-family:'JetBrains Mono',monospace;font-size:.7rem;letter-spacing:.55em;
+  color:var(--cream);margin-bottom:2rem;text-transform:uppercase;text-shadow:0 2px 10px #000}
+.hero h1{font-family:'Playfair Display',serif;font-size:clamp(3rem,10vw,9rem);
+  font-weight:900;line-height:.95;letter-spacing:-.02em;margin-bottom:1rem;
+  color:var(--cream);text-shadow:0 4px 30px rgba(0,0,0,.95)}
+.hero h1 em{font-style:italic;font-weight:400;display:block;color:var(--gold)}
+.hero-sub{font-family:'Playfair Display',serif;font-size:clamp(1rem,2vw,1.4rem);
+  color:var(--cream);font-style:italic;max-width:680px;margin:1.5rem auto 0;
+  line-height:1.5;text-shadow:0 2px 15px rgba(0,0,0,.95)}
+.hero-stats{display:flex;gap:2.5rem;margin-top:3rem;flex-wrap:wrap;justify-content:center}
+.hstat{text-align:center}
+.hstat .n{font-family:'Playfair Display',serif;font-size:2.2rem;color:var(--gold);font-weight:700;
+  text-shadow:0 2px 20px rgba(0,0,0,.9)}
+.hstat .l{font-size:.62rem;letter-spacing:.3em;color:var(--cream);text-transform:uppercase;margin-top:.3rem;
+  text-shadow:0 2px 10px #000}
+.scroll-cue{position:absolute;bottom:1.5rem;left:50%;transform:translateX(-50%);
+  font-size:.6rem;letter-spacing:.5em;color:var(--cream);text-transform:uppercase;
+  animation:pulse 2s ease-in-out infinite;z-index:1;text-shadow:0 2px 10px #000}
+@keyframes pulse{0%,100%{opacity:.5;transform:translate(-50%,0)}50%{opacity:1;transform:translate(-50%,8px)}}
+
+/* ===== SECTIONS ===== */
+section{position:relative;z-index:1}
+.section-pad{padding:5rem 1.5rem;max-width:1700px;margin:0 auto}
+.s-head{margin-bottom:3rem;border-bottom:1px solid #1a2018;padding-bottom:1.5rem}
+.s-num{font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--gold);
+  letter-spacing:.3em;display:block;margin-bottom:.5rem}
+.s-head h2{font-family:'Playfair Display',serif;font-size:clamp(2rem,5vw,4rem);
+  font-weight:400;color:var(--cream);line-height:1}
+.s-head h2 em{color:var(--gold);font-style:italic}
+.s-head p{color:var(--fog);margin-top:1rem;max-width:780px;font-style:italic;font-family:'Playfair Display',serif}
+
+/* ===== SCENES (full-bleed cinematic) ===== */
+.scene{position:relative;min-height:88vh;display:flex;align-items:flex-end;
+  overflow:hidden;border-bottom:1px solid #000}
+.scene-bg{position:absolute;inset:0;z-index:0;overflow:hidden}
+.scene-bg img{width:100%;height:100%;object-fit:cover;
+  animation:kenburns 24s ease-in-out infinite alternate;filter:saturate(.85)}
+.scene-bg::after{content:'';position:absolute;inset:0;
+  background:linear-gradient(180deg,rgba(5,7,8,.2) 0%,rgba(5,7,8,.05) 40%,rgba(5,7,8,.92) 100%);}
+.scene-inner{position:relative;z-index:1;max-width:1700px;margin:0 auto;
+  padding:3rem 1.5rem 4rem;width:100%}
+.scene-tag{font-family:'JetBrains Mono',monospace;font-size:.65rem;
+  letter-spacing:.45em;color:var(--gold);text-transform:uppercase;margin-bottom:.7rem;text-shadow:0 2px 10px #000}
+.scene-title{font-family:'Playfair Display',serif;font-size:clamp(2.4rem,7vw,6rem);
+  font-weight:400;color:var(--cream);line-height:.95;margin-bottom:.5rem;
+  text-shadow:0 4px 30px rgba(0,0,0,.95)}
+.scene-title em{color:var(--gold);font-style:italic;display:block;font-size:.8em}
+.scene-where{font-family:'JetBrains Mono',monospace;font-size:.75rem;
+  color:var(--amber);letter-spacing:.1em;margin-bottom:1.5rem;text-shadow:0 2px 10px #000}
+.scene-text{font-family:'Playfair Display',serif;font-size:clamp(1rem,1.6vw,1.25rem);
+  color:var(--cream);max-width:700px;font-style:italic;line-height:1.55;
+  text-shadow:0 2px 15px rgba(0,0,0,.9);margin-bottom:1.5rem}
+.scene-data{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  gap:1.2rem;margin-top:2rem;max-width:1000px;background:rgba(5,7,8,.65);
+  padding:1.5rem;border:1px solid rgba(201,166,76,.4);border-radius:4px;backdrop-filter:blur(6px)}
+.sd-cell{font-size:.85rem;color:var(--cream)}
+.sd-cell h5{font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.3em;
+  color:var(--gold);text-transform:uppercase;margin-bottom:.4rem}
+.sd-cell .gps{font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--amber)}
+.sd-cell a{color:var(--amber);text-decoration:none;border-bottom:1px dotted}
+.scene-rank{display:inline-block;padding:.3rem .8rem;font-family:'JetBrains Mono',monospace;
+  font-size:.6rem;letter-spacing:.25em;text-transform:uppercase;border-radius:2px;
+  background:rgba(201,166,76,.2);color:var(--gold);border:1px solid var(--gold);margin-top:1rem}
+
+/* ===== MAP ===== */
+#mapwrap{height:620px;background:var(--deep);border:1px solid #1a2018;
+  border-radius:4px;position:relative;overflow:hidden}
+#map{height:100%;width:100%;background:var(--deep);filter:hue-rotate(-12deg) saturate(.55) brightness(.78)}
+.map-legend{position:absolute;top:14px;right:14px;z-index:500;
+  background:rgba(5,7,8,.92);padding:.7rem 1rem;border:1px solid #2a3028;
+  border-radius:3px;font-size:.66rem;color:var(--fog);backdrop-filter:blur(8px)}
+.lg-row{display:flex;align-items:center;gap:.5rem;margin:.25rem 0}
+.lg-dot{width:10px;height:10px;border-radius:50%;border:2px solid #fff}
+.leaflet-popup-content-wrapper{background:#0d1114!important;color:var(--cream)!important;
+  border-radius:3px!important;border:1px solid var(--gold)}
+.leaflet-popup-tip{background:#0d1114!important}
+.leaflet-popup-content{font-family:'Inter',sans-serif;font-size:.82rem;margin:.8rem 1rem;line-height:1.5}
+.leaflet-popup-content h4{font-family:'Playfair Display',serif;color:var(--gold);
+  font-weight:700;font-size:1rem;margin-bottom:.3rem}
+.leaflet-popup-content .gps{font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--ember)}
+.leaflet-popup-content a{color:var(--amber);text-decoration:none}
+.leaflet-control-attribution{background:rgba(5,7,8,.7)!important;color:var(--ash)!important;font-size:.6rem!important}
+.leaflet-control-attribution a{color:var(--fog)!important}
+
+/* ===== TIMELINE ===== */
+.timeline{display:flex;flex-direction:column;gap:1rem}
+.day{background:var(--char);border:1px solid #1a2018;border-radius:3px;overflow:hidden;cursor:pointer;transition:all .3s}
+.day:hover{border-color:#3a3a2a}
+.day.open{border-color:var(--gold)}
+.day-head{display:grid;grid-template-columns:80px 110px 1fr auto;gap:1.5rem;
+  padding:1.4rem 1.5rem;align-items:center}
+.day-num{font-family:'Playfair Display',serif;font-size:2rem;color:var(--gold);font-weight:400;line-height:1}
+.day-num small{display:block;font-size:.55rem;letter-spacing:.3em;color:var(--ash);
+  font-family:'JetBrains Mono',monospace;margin-top:.4rem}
+.day-date{font-family:'JetBrains Mono',monospace;font-size:.75rem;color:var(--amber);letter-spacing:.1em}
+.day-date small{display:block;color:var(--fog);font-size:.65rem;margin-top:.3rem}
+.day-title{font-family:'Playfair Display',serif;font-size:1.15rem;color:var(--cream)}
+.day-title em{color:var(--gold);font-style:italic;display:block;font-size:.82rem;margin-top:.3rem;
+  font-family:'Inter',sans-serif;letter-spacing:.05em;font-weight:400}
+.day-stat{font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--fog);text-align:right;line-height:1.5}
+.day-stat b{color:var(--ember)}
+.day-body{max-height:0;overflow:hidden;transition:max-height .55s ease;
+  border-top:1px solid #1a2018;background:var(--deep)}
+.day.open .day-body{max-height:3500px}
+.day-inner{padding:2rem 1.5rem;display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:2rem}
+.dcol h4{font-family:'JetBrains Mono',monospace;font-size:.65rem;letter-spacing:.3em;
+  color:var(--gold);text-transform:uppercase;margin-bottom:.8rem;padding-bottom:.5rem;border-bottom:1px solid #1a2018}
+.dcol p,.dcol li{font-size:.85rem;color:var(--fog);line-height:1.6;margin-bottom:.5rem}
+.dcol li{list-style:none;padding-left:1rem;position:relative}
+.dcol li::before{content:'→';position:absolute;left:0;color:var(--gold)}
+.dcol a{color:var(--amber);text-decoration:none;border-bottom:1px dotted var(--ember)}
+.gps-coord{font-family:'JetBrains Mono',monospace;color:var(--ember);font-size:.72rem;
+  display:inline-block;padding:.15rem .4rem;background:#1a2018;border-radius:2px}
+.hwork{background:#0f1414;border-left:2px solid var(--gold);padding:.8rem 1rem;
+  margin-top:.6rem;font-style:italic;color:var(--cream);font-size:.84rem;line-height:1.55}
+.hwork::before{content:'FIELD WORK';display:block;font-family:'JetBrains Mono',monospace;
+  font-size:.55rem;letter-spacing:.4em;color:var(--gold);font-style:normal;margin-bottom:.4rem}
+
+/* ===== GAMES — high-end ===== */
+#games-wrap{background:#080a0d}
+.games-shelf{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:.8rem;margin-bottom:2rem}
+.game-card{background:linear-gradient(135deg,#12161a,#0a0d10);
+  border:1px solid #2a3028;padding:1.4rem 1.1rem;cursor:pointer;
+  transition:all .35s cubic-bezier(.4,0,.2,1);border-radius:6px;text-align:center;position:relative;overflow:hidden}
+.game-card::before{content:'';position:absolute;inset:0;
+  background:radial-gradient(circle at center,rgba(201,166,76,.15),transparent 65%);
+  opacity:0;transition:opacity .3s}
+.game-card:hover{transform:translateY(-4px);border-color:var(--gold);box-shadow:0 12px 40px rgba(201,166,76,.18)}
+.game-card:hover::before{opacity:1}
+.game-card.active{border-color:var(--gold);background:linear-gradient(135deg,#1a2018,#0d0f12);
+  box-shadow:0 0 30px rgba(201,166,76,.25)}
+.game-card .gi{font-size:2.4rem;display:block;margin-bottom:.5rem;filter:drop-shadow(0 4px 10px rgba(0,0,0,.6))}
+.game-card h4{font-family:'Playfair Display',serif;font-size:1.05rem;color:var(--cream);font-weight:400;margin-bottom:.2rem;position:relative;z-index:1}
+.game-card p{font-size:.7rem;color:var(--ash);line-height:1.4;position:relative;z-index:1}
+.game-stage{background:linear-gradient(180deg,#0a0d10,#070909);border:1px solid var(--gold);
+  border-radius:6px;padding:2rem;min-height:520px;position:relative;overflow:hidden;
+  box-shadow:0 20px 60px rgba(0,0,0,.6),inset 0 0 80px rgba(201,166,76,.04)}
+.gs-title{font-family:'Playfair Display',serif;font-size:1.7rem;color:var(--gold);
+  font-weight:400;margin-bottom:.3rem;text-shadow:0 2px 15px rgba(201,166,76,.4)}
+.gs-sub{font-size:.78rem;color:var(--fog);margin-bottom:1.4rem;font-style:italic}
+.gs-stats{display:flex;gap:1.2rem;margin-bottom:1.5rem;flex-wrap:wrap;
+  background:rgba(0,0,0,.4);padding:.8rem 1.2rem;border-radius:4px;border:1px solid #1a2018}
+.gs-stat{font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--fog);letter-spacing:.1em}
+.gs-stat b{color:var(--gold);font-size:1rem;display:block;margin-top:.15rem}
+.btn{font-family:'JetBrains Mono',monospace;font-size:.72rem;letter-spacing:.2em;
+  text-transform:uppercase;background:transparent;color:var(--gold);
+  border:1px solid var(--gold);padding:.75rem 1.5rem;cursor:pointer;
+  transition:all .25s;border-radius:3px;font-weight:600}
+.btn:hover{background:var(--gold);color:var(--void);transform:translateY(-1px);box-shadow:0 6px 20px rgba(201,166,76,.4)}
+.btn:active{transform:translateY(0)}
+.btn.sm{padding:.5rem 1rem;font-size:.65rem}
+.btn.red{color:var(--danger);border-color:var(--danger)}
+.btn.red:hover{background:var(--danger);color:#fff}
+.btn-row{display:flex;gap:.7rem;flex-wrap:wrap;margin-top:1rem}
+
+/* SOUND TOGGLE */
+.sound-toggle{position:absolute;top:1.2rem;right:1.2rem;background:rgba(0,0,0,.5);
+  border:1px solid #1a2018;width:38px;height:38px;border-radius:50%;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;font-size:1rem;
+  color:var(--fog);transition:all .2s;z-index:5}
+.sound-toggle:hover{border-color:var(--gold);color:var(--gold)}
+
+/* CAR BINGO — gem-like tiles */
+.bingo-card{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;max-width:600px;margin:1rem auto;perspective:1000px}
+.bingo-cell{aspect-ratio:1;background:linear-gradient(135deg,#161b1f,#0d1014);
+  border:1px solid #2a3028;display:flex;align-items:center;justify-content:center;
+  text-align:center;padding:.4rem;font-size:.65rem;color:var(--cream);cursor:pointer;
+  transition:all .4s cubic-bezier(.4,0,.2,1);border-radius:3px;line-height:1.2;
+  user-select:none;font-weight:500;position:relative;transform-style:preserve-3d}
+.bingo-cell:hover{border-color:var(--gold);transform:translateY(-2px) scale(1.03)}
+.bingo-cell:active{transform:scale(.95)}
+.bingo-cell.spotted{background:linear-gradient(135deg,#2d4a2d,#1a2e1a);
+  color:var(--cream);border-color:var(--gold);
+  box-shadow:0 0 20px rgba(201,166,76,.4),inset 0 0 20px rgba(201,166,76,.2);
+  animation:tileFlip .55s ease}
+@keyframes tileFlip{0%{transform:rotateY(0)}50%{transform:rotateY(180deg) scale(1.1)}100%{transform:rotateY(360deg) scale(1)}}
+.bingo-cell.free{background:linear-gradient(135deg,var(--gold),var(--amber));
+  color:var(--void);font-weight:800;font-size:.85rem;box-shadow:0 0 25px rgba(201,166,76,.5)}
+.bingo-cell.win{animation:winPulse 1s ease infinite}
+@keyframes winPulse{0%,100%{box-shadow:0 0 25px rgba(201,166,76,.4)}50%{box-shadow:0 0 50px rgba(201,166,76,.9)}}
+.bingo-banner{font-family:'Playfair Display',serif;font-size:2.5rem;color:var(--gold);
+  text-align:center;font-weight:900;text-shadow:0 0 40px var(--gold);
+  animation:bannerBounce .8s ease;margin:1rem 0}
+@keyframes bannerBounce{0%{transform:scale(0) rotate(-15deg);opacity:0}50%{transform:scale(1.3) rotate(5deg)}100%{transform:scale(1) rotate(0);opacity:1}}
+
+/* WILDLIFE — photo cards */
+.wild-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:.8rem}
+.wild-card{background:linear-gradient(180deg,#161b1f,#0d1014);
+  border:1px solid #2a3028;cursor:pointer;transition:all .35s;border-radius:5px;
+  text-align:center;user-select:none;position:relative;overflow:hidden;padding-bottom:.8rem}
+.wild-card:hover{border-color:var(--gold);transform:translateY(-3px);box-shadow:0 10px 30px rgba(0,0,0,.6)}
+.wild-photo{width:100%;aspect-ratio:1.3;background-size:cover;background-position:center;
+  filter:grayscale(.85) brightness(.65);transition:all .4s;position:relative}
+.wild-photo::after{content:'';position:absolute;inset:0;
+  background:linear-gradient(180deg,transparent 50%,rgba(0,0,0,.6))}
+.wild-card.seen .wild-photo{filter:grayscale(0) brightness(1) saturate(1.1)}
+.wild-card.seen{border-color:var(--gold);box-shadow:0 0 25px rgba(201,166,76,.3)}
+.wild-card.seen::before{content:'✓ SPOTTED';position:absolute;top:.5rem;right:.5rem;
+  font-family:'JetBrains Mono',monospace;font-size:.55rem;letter-spacing:.2em;
+  background:var(--gold);color:var(--void);padding:.25rem .5rem;border-radius:2px;
+  font-weight:700;z-index:2;animation:stampIn .5s ease}
+@keyframes stampIn{0%{transform:scale(0) rotate(-20deg);opacity:0}100%{transform:scale(1) rotate(-5deg);opacity:1}}
+.wn{font-family:'Playfair Display',serif;font-size:.95rem;color:var(--cream);margin-top:.5rem;padding:0 .5rem}
+.wl{font-size:.62rem;color:var(--ash);margin-top:.2rem;font-style:italic;padding:0 .5rem}
+.wild-card.seen .wn{color:var(--gold)}
+
+/* LICENSE PLATES */
+.lp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(75px,1fr));gap:.4rem;max-width:1000px}
+.lp{background:linear-gradient(180deg,#1a1f25,#0d1014);border:1px solid #2a3028;
+  padding:.65rem .3rem;text-align:center;cursor:pointer;transition:all .25s;border-radius:3px;
+  user-select:none;font-family:'JetBrains Mono',monospace;font-size:.75rem;color:var(--cream);
+  font-weight:700;position:relative}
+.lp:hover{border-color:var(--gold);transform:translateY(-2px)}
+.lp:active{transform:scale(.92)}
+.lp.got{background:linear-gradient(180deg,#3a3a2a,#2a2418);color:var(--gold);
+  border-color:var(--gold);box-shadow:0 0 15px rgba(201,166,76,.4);
+  animation:plateFlip .5s ease}
+@keyframes plateFlip{0%{transform:rotateY(0)}50%{transform:rotateY(180deg)}100%{transform:rotateY(360deg)}}
+
+/* QUIZ */
+.quiz-q{background:linear-gradient(180deg,#0f1418,#0a0d10);padding:1.5rem;border-radius:4px;
+  border:1px solid #1a2018;margin-bottom:1rem;position:relative;overflow:hidden}
+.quiz-q::before{content:attr(data-num);position:absolute;top:.5rem;right:1rem;
+  font-family:'Playfair Display',serif;font-size:4rem;color:#15191e;font-weight:700;line-height:1}
+.quiz-q h5{font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--cream);
+  margin-bottom:1rem;line-height:1.4;font-weight:400;position:relative;z-index:1}
+.quiz-opts{display:grid;gap:.6rem;position:relative;z-index:1}
+.qopt{background:#13181d;border:1px solid #2a3028;padding:.95rem 1.1rem;cursor:pointer;
+  transition:all .25s;border-radius:3px;font-size:.88rem;color:var(--cream);text-align:left;
+  font-family:inherit;display:flex;align-items:center;gap:.7rem}
+.qopt::before{content:attr(data-l);font-family:'JetBrains Mono',monospace;color:var(--ash);
+  font-weight:700;font-size:.75rem;width:18px}
+.qopt:hover{border-color:var(--gold);background:#181d22;transform:translateX(4px)}
+.qopt.correct{background:linear-gradient(135deg,#1a2e1a,#0f1f10);border-color:var(--safe);color:var(--safe);
+  box-shadow:0 0 20px rgba(92,184,92,.3)}
+.qopt.correct::before{color:var(--safe)}
+.qopt.wrong{background:linear-gradient(135deg,#2e1a1a,#1f0f0f);border-color:var(--danger);color:var(--danger)}
+.qopt.dis{pointer-events:none;opacity:.55}
+.quiz-fb{margin-top:1rem;font-size:.82rem;color:var(--amber);font-style:italic;
+  padding:.85rem 1rem;background:rgba(201,166,76,.08);border-left:3px solid var(--gold);
+  border-radius:3px;line-height:1.5}
+
+/* MILE MATH */
+.mm-truck{font-size:3rem;margin:1rem auto;display:block;text-align:center;line-height:1;
+  transform:translateX(var(--tx,0));transition:transform .8s cubic-bezier(.4,0,.2,1)}
+.mm-road{height:6px;background:linear-gradient(90deg,#1a2018 0%,#1a2018 100%);
+  position:relative;border-radius:3px;margin:1rem 0 2rem}
+.mm-road::before{content:'';position:absolute;left:0;top:0;height:100%;
+  background:linear-gradient(90deg,var(--gold),var(--amber));border-radius:3px;
+  width:var(--prog,0%);transition:width .8s ease}
+.mm-flag{position:absolute;right:-8px;top:-12px;font-size:1.4rem}
+.mm-stage{padding:1rem 0}
+.mm-q{font-family:'Playfair Display',serif;font-size:clamp(1.4rem,3.2vw,2.1rem);
+  color:var(--cream);margin:1rem 0 1.5rem;font-weight:400;line-height:1.4;text-align:center}
+.mm-q b{color:var(--gold)}
+.mm-input{font-family:'JetBrains Mono',monospace;font-size:1.8rem;background:#0d1014;
+  border:2px solid var(--gold);padding:.7rem 1rem;color:var(--cream);text-align:center;
+  width:220px;border-radius:4px;display:block;margin:0 auto}
+.mm-input:focus{outline:none;background:#13181d;box-shadow:0 0 25px rgba(201,166,76,.4)}
+.mm-fb{margin-top:1.5rem;font-size:1.05rem;font-family:'Playfair Display',serif;
+  font-style:italic;min-height:1.5em;text-align:center}
+.mm-fb.right{color:var(--safe);font-size:1.3rem;animation:fbBurst .6s ease}
+.mm-fb.wrong{color:var(--danger)}
+@keyframes fbBurst{0%{transform:scale(0);opacity:0}50%{transform:scale(1.2)}100%{transform:scale(1);opacity:1}}
+
+/* SKY */
+.sky{background:radial-gradient(ellipse at center,#0a1432 0%,#000814 70%,#000 100%);
+  height:440px;position:relative;border-radius:6px;overflow:hidden;border:1px solid #1a2018;
+  box-shadow:inset 0 0 80px rgba(0,0,30,.8)}
+.cstar{position:absolute;background:#fff;border-radius:50%;
+  box-shadow:0 0 6px #fff,0 0 14px rgba(255,255,255,.8);animation:starPulse var(--p,2.5s) ease-in-out infinite}
+@keyframes starPulse{0%,100%{opacity:.8;transform:scale(1)}50%{opacity:1;transform:scale(1.4)}}
+.cline{position:absolute;background:linear-gradient(90deg,rgba(201,166,76,.55),rgba(201,166,76,.25));
+  transform-origin:left center;height:1.5px;box-shadow:0 0 8px rgba(201,166,76,.3)}
+.cname{position:absolute;color:var(--gold);font-family:'Playfair Display',serif;
+  font-size:.95rem;letter-spacing:.15em;text-shadow:0 0 12px rgba(0,0,0,.95);font-style:italic}
+.const-fact{padding:1.2rem 1.4rem;background:linear-gradient(135deg,#0f1418,#0a0d10);
+  border-left:3px solid var(--gold);margin-top:1rem;font-size:.88rem;color:var(--cream);
+  line-height:1.6;border-radius:3px;font-style:italic}
+
+/* CONFETTI canvas */
+#confetti{position:fixed;inset:0;pointer-events:none;z-index:9998}
+
+/* ACHIEVEMENT TOAST */
+.toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(120%);
+  background:linear-gradient(135deg,var(--gold),var(--amber));color:var(--void);
+  padding:1rem 1.8rem;border-radius:50px;font-family:'JetBrains Mono',monospace;
+  font-size:.85rem;letter-spacing:.15em;font-weight:700;
+  box-shadow:0 12px 40px rgba(201,166,76,.5);z-index:9999;
+  transition:transform .5s cubic-bezier(.4,0,.2,1);display:flex;align-items:center;gap:.7rem}
+.toast.show{transform:translateX(-50%) translateY(0)}
+.toast .ti{font-size:1.3rem}
+
+/* JOURNAL */
+.j-form{background:linear-gradient(180deg,#0f1418,#0a0d10);padding:1.5rem;border-radius:4px;
+  margin-bottom:1.5rem;border:1px solid #1a2018}
+.j-form input,.j-form select,.j-form textarea{width:100%;background:#0a0d10;
+  border:1px solid #2a3028;padding:.75rem;color:var(--cream);
+  font-family:inherit;border-radius:3px;font-size:.88rem;margin-bottom:.7rem}
+.j-form textarea{min-height:100px;resize:vertical}
+.j-form input:focus,.j-form select:focus,.j-form textarea:focus{outline:none;border-color:var(--gold);box-shadow:0 0 15px rgba(201,166,76,.2)}
+.j-form label{font-family:'JetBrains Mono',monospace;font-size:.62rem;letter-spacing:.25em;
+  color:var(--gold);text-transform:uppercase;display:block;margin-bottom:.3rem;margin-top:.5rem}
+.j-entry{background:linear-gradient(180deg,#0f1418,#0a0d10);border:1px solid #1a2018;
+  border-left:3px solid var(--gold);padding:1.2rem;margin-bottom:.8rem;border-radius:3px}
+.j-meta{font-family:'JetBrains Mono',monospace;font-size:.66rem;color:var(--ember);
+  letter-spacing:.1em;margin-bottom:.5rem;display:flex;justify-content:space-between;align-items:center}
+.j-by{color:var(--gold);font-weight:700}
+.j-text{color:var(--cream);font-size:.9rem;line-height:1.55;white-space:pre-wrap}
+.j-loc{font-size:.72rem;color:var(--fog);margin-top:.5rem;font-style:italic}
+.j-del{background:transparent;border:none;color:var(--ash);cursor:pointer;
+  font-size:.72rem;font-family:'JetBrains Mono',monospace}
+.j-del:hover{color:var(--danger)}
+
+/* BUDGET */
+.bt-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:1.5rem}
+@media(max-width:768px){.bt-grid{grid-template-columns:1fr}}
+.bt-side{background:linear-gradient(180deg,#0f1418,#0a0d10);border:1px solid #1a2018;padding:1.5rem;border-radius:4px}
+.bt-side h4{font-family:'JetBrains Mono',monospace;font-size:.7rem;letter-spacing:.3em;color:var(--gold);margin-bottom:1rem}
+.bt-row{display:flex;justify-content:space-between;padding:.6rem 0;border-bottom:1px solid #1a2018;font-size:.88rem}
+.bt-row b{color:var(--cream)}
+.bt-row .v{font-family:'JetBrains Mono',monospace;color:var(--amber)}
+.bt-row.tot{border-top:2px solid var(--gold);border-bottom:none;padding-top:1rem;margin-top:.5rem;font-size:1rem}
+.bt-row.tot .v{color:var(--gold);font-size:1.3rem;font-weight:700}
+.bt-form{display:grid;grid-template-columns:1fr 100px 110px 50px;gap:.5rem;margin-bottom:1rem;align-items:end}
+@media(max-width:600px){.bt-form{grid-template-columns:1fr 1fr}}
+.bt-form input,.bt-form select{background:#0a0d10;border:1px solid #2a3028;
+  padding:.65rem;color:var(--cream);font-family:inherit;border-radius:3px;font-size:.8rem}
+.bt-form input:focus,.bt-form select:focus{outline:none;border-color:var(--gold)}
+.bt-list{max-height:280px;overflow-y:auto;margin-top:.5rem}
+.bt-item{display:grid;grid-template-columns:1fr 90px 80px 30px;gap:.5rem;padding:.55rem;
+  border-bottom:1px solid #1a2018;font-size:.78rem;align-items:center}
+.bt-cat{font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--gold);letter-spacing:.15em}
+.bt-amt{font-family:'JetBrains Mono',monospace;color:var(--amber);text-align:right}
+.bt-dt{font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--ash)}
+.progress{height:8px;background:#1a2018;border-radius:4px;overflow:hidden;margin-top:.5rem}
+.progress span{display:block;height:100%;background:linear-gradient(90deg,var(--safe),var(--warn),var(--danger));transition:width .8s ease}
+
+/* PACK / SAFE / DASH (similar to before but tweaked) */
+.pack-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.5rem}
+.pack-cat{background:linear-gradient(180deg,#0f1418,#0a0d10);border:1px solid #1a2018;padding:1.4rem;border-radius:4px}
+.pack-cat h4{font-family:'JetBrains Mono',monospace;font-size:.7rem;letter-spacing:.3em;
+  color:var(--gold);margin-bottom:1rem;padding-bottom:.5rem;border-bottom:1px solid #1a2018}
+.pack-item{display:flex;align-items:flex-start;gap:.6rem;padding:.4rem 0;cursor:pointer;
+  font-size:.82rem;color:var(--cream);user-select:none}
+.pack-item input{margin-top:3px;accent-color:var(--gold);cursor:pointer;width:18px;height:18px}
+.pack-item.done{color:var(--ash);text-decoration:line-through}
+.pack-progress{font-family:'JetBrains Mono',monospace;font-size:.8rem;color:var(--amber);
+  margin-bottom:1.2rem;letter-spacing:.15em}
+
+.safe-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.4rem}
+.safe-card{background:linear-gradient(180deg,#0f1418,#0a0d10);border:1px solid #1a2018;
+  padding:1.5rem;border-radius:4px;border-left:3px solid var(--gold)}
+.safe-card.danger{border-left-color:var(--danger)}
+.safe-card.warn{border-left-color:var(--warn)}
+.safe-card.info{border-left-color:var(--info)}
+.safe-card h4{font-family:'Playfair Display',serif;font-size:1.15rem;color:var(--cream);margin-bottom:.8rem;font-weight:400}
+.safe-card h4::before{content:attr(data-icon);margin-right:.5rem}
+.safe-card ul{list-style:none}
+.safe-card li{padding:.3rem 0;font-size:.83rem;color:var(--fog);padding-left:1rem;position:relative;line-height:1.5}
+.safe-card li::before{content:'·';position:absolute;left:0;color:var(--gold);font-weight:900}
+.safe-card a{color:var(--amber);text-decoration:none;border-bottom:1px dotted var(--ember)}
+
+.dash{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:.8rem;margin-top:2rem}
+.dash a{background:linear-gradient(180deg,#0f1418,#0a0d10);border:1px solid #1a2018;
+  padding:1rem 1.2rem;text-decoration:none;color:var(--cream);transition:all .25s;
+  border-radius:3px;display:block}
+.dash a:hover{border-color:var(--gold);transform:translateY(-2px);box-shadow:0 6px 20px rgba(201,166,76,.15)}
+.dash a .dt{font-family:'JetBrains Mono',monospace;font-size:.62rem;letter-spacing:.25em;color:var(--gold);text-transform:uppercase}
+.dash a .dn{font-family:'Playfair Display',serif;font-size:1rem;color:var(--cream);margin-top:.3rem;display:block}
+
+/* RECIPES */
+.recipes{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.2rem}
+.recipe{background:linear-gradient(180deg,#0f1418,#0a0d10);border:1px solid #1a2018;padding:1.4rem;border-radius:4px}
+.recipe h4{font-family:'Playfair Display',serif;color:var(--gold);margin-bottom:.5rem;font-size:1.15rem;font-weight:400}
+.recipe .when{font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--ember);letter-spacing:.2em;margin-bottom:.8rem;text-transform:uppercase}
+.recipe ul{list-style:none;font-size:.8rem;color:var(--fog);line-height:1.55}
+.recipe li{padding:.15rem 0}
+.recipe .method{font-size:.78rem;color:var(--cream);margin-top:.6rem;padding-top:.6rem;border-top:1px solid #1a2018;line-height:1.55;font-style:italic}
+
+/* PHOTO GALLERY */
+.gallery{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:.8rem}
+.gphoto{aspect-ratio:1.3;background-size:cover;background-position:center;border-radius:4px;
+  position:relative;overflow:hidden;cursor:pointer;transition:all .4s}
+.gphoto::after{content:'';position:absolute;inset:0;
+  background:linear-gradient(180deg,transparent 50%,rgba(0,0,0,.85));transition:opacity .3s}
+.gphoto:hover{transform:scale(1.02)}
+.gphoto-cap{position:absolute;bottom:.7rem;left:.9rem;right:.9rem;z-index:1;
+  color:var(--cream);font-family:'Playfair Display',serif;font-size:1rem;
+  font-style:italic;text-shadow:0 2px 10px #000}
+.gphoto-cap small{display:block;font-size:.62rem;font-family:'JetBrains Mono',monospace;
+  color:var(--gold);letter-spacing:.2em;text-transform:uppercase;margin-bottom:.3rem;font-style:normal}
+
+footer{background:#000;padding:3rem 1.5rem;text-align:center;border-top:1px solid #1a2018;margin-top:6rem;position:relative;z-index:1}
+footer p{font-size:.72rem;color:var(--ash);letter-spacing:.15em}
+footer .sig{font-family:'Playfair Display',serif;font-style:italic;color:var(--gold);font-size:1.1rem;margin-bottom:1rem}
+
+@media (max-width:768px){
+  .day-head{grid-template-columns:60px 1fr;gap:1rem}
+  .day-stat,.day-date{display:none}
+  .nav-links{gap:.7rem;font-size:.6rem}
+  .countdown{display:none}
+  .hero h1{font-size:3rem}
+  .section-pad{padding:3.5rem 1rem}
+  .scene{min-height:75vh}
+  #mapwrap{height:480px}
+}
+</style>
+</head>
+<body>
+
+<div id="loader">
+  <div class="l-title">THE EXPEDITION</div>
+  <div class="l-sub">Erwin · Tennessee → Paradise · Montana</div>
+  <div class="l-bar"></div>
+</div>
+
+<canvas id="confetti"></canvas>
+<div class="toast" id="toast"><span class="ti">★</span><span id="toastMsg"></span></div>
+
+<nav id="nav">
+  <div class="nav-inner">
+    <div class="nav-brand">EXPEDITION · <span>2026</span></div>
+    <div class="nav-links">
+      <a href="#hero" class="active">Top</a>
+      <a href="#scenes">Scenes</a>
+      <a href="#map">Map</a>
+      <a href="#days">Days</a>
+      <a href="#games">Play</a>
+      <a href="#wildlife">Wildlife</a>
+      <a href="#school">School</a>
+      <a href="#money">$</a>
+      <a href="#pack">Pack</a>
+      <a href="#safe">Safe</a>
+      <a href="#career">Career</a>
+    </div>
+    <div class="countdown" id="cd"></div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+  <div class="hero-bg">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/f/f6/Going-to-the-Sun_Road_-_Glacier_National_Park.jpg" alt="Going-to-the-Sun Road, Glacier National Park">
+  </div>
+  <div class="hero-content">
+    <div class="hero-meta">JUNE 28 · 2026 — JULY 18 · 2026 · TWENTY-ONE DAYS</div>
+    <h1>The Crown<br>of the<br><em>Continent.</em></h1>
+    <p class="hero-sub">Seven travelers. One vehicle. Two thousand five hundred miles of fossil beds, glacial valleys, and dark sky. From the oldest mountains on the continent to the ice that's still cutting the youngest.</p>
+    <div class="hero-stats">
+      <div class="hstat"><div class="n">2,580</div><div class="l">Miles</div></div>
+      <div class="hstat"><div class="n">14</div><div class="l">Days Out</div></div>
+      <div class="hstat"><div class="n">7</div><div class="l">Days Paradise</div></div>
+      <div class="hstat"><div class="n">11</div><div class="l">Anchor Stops</div></div>
+      <div class="hstat"><div class="n">0</div><div class="l">Tourist Traps</div></div>
+    </div>
+  </div>
+  <div class="scroll-cue">Scroll · Begin</div>
+</section>
+
+<!-- GAMES (moved up — kids first) -->
+<section id="games-wrap">
+<div class="section-pad" id="games">
+  <div class="s-head">
+    <span class="s-num">02 · Play Engines · For the kids</span>
+    <h2>Hand the tablet <em>over.</em></h2>
+    <p>Six working games. All save progress to this device. Win confetti. Earn badges. Real photos. Real chimes.</p>
+  </div>
+  <div class="games-shelf" id="gametabs"></div>
+  <div class="game-stage" id="gamestage">
+    <div style="text-align:center;padding:5rem 2rem;color:var(--gold);font-family:Playfair Display,serif;font-style:italic;font-size:1.2rem">Loading games...</div>
+  </div>
+</div>
+</section>
+
+<!-- CINEMATIC SCENES -->
+<div id="scenes"></div>
+
+<!-- MAP -->
+<section id="map">
+<div class="section-pad">
+  <div class="s-head">
+    <span class="s-num">03 · Cartography</span>
+    <h2>The <em>route</em>, plotted.</h2>
+    <p>Real OpenStreetMap tiles. Every stop pinned. Click any marker for GPS, link, and what's there.</p>
+  </div>
+  <div id="mapwrap">
+    <div id="map"></div>
+    <div class="map-legend">
+      <div class="lg-row"><span class="lg-dot" style="background:#c9a64c"></span>Anchor stop</div>
+      <div class="lg-row"><span class="lg-dot" style="background:#5cb85c"></span>Boondock</div>
+      <div class="lg-row"><span class="lg-dot" style="background:#5bc0de"></span>Transit</div>
+      <div class="lg-row"><span class="lg-dot" style="background:#e8a547"></span>Start / End</div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- DAYS -->
+<section id="days">
+<div class="section-pad">
+  <div class="s-head">
+    <span class="s-num">03 · Timeline</span>
+    <h2>Fourteen days <em>out.</em><br>Seven days in <em>Paradise.</em></h2>
+    <p>Tap any day to open the full plan — drive logic, where to sleep, what URL to hit, what to teach the kids that night.</p>
+  </div>
+  <div class="timeline" id="timeline"></div>
+</div>
+</section>
+
+<!-- WILDLIFE GALLERY -->
+<section id="wildlife">
+<div class="section-pad">
+  <div class="s-head">
+    <span class="s-num">05 · Wildlife Atlas</span>
+    <h2>What you might <em>see.</em></h2>
+    <p>Real photos. Real species. Real distances to keep. Spot one in the wild and tap it inside the Wildlife Spotter game above.</p>
+  </div>
+  <div class="gallery" id="gallery"></div>
+</div>
+</section>
+
+<!-- SCHOOL -->
+<section id="school">
+<div class="section-pad">
+  <div class="s-head">
+    <span class="s-num">06 · Field School</span>
+    <h2>The rolling <em>curriculum.</em></h2>
+    <p>Three weeks across deep time. Geology, paleontology, climate, ecology, archaeoastronomy — taught with the actual landscape as the textbook.</p>
+  </div>
+  <div id="school-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.5rem;margin-bottom:3rem"></div>
+  <h3 style="font-family:'Playfair Display',serif;font-size:1.7rem;color:var(--gold);margin-bottom:1rem;font-weight:400">Field Journal</h3>
+  <p style="color:var(--fog);font-size:.88rem;margin-bottom:1.5rem;max-width:780px;font-style:italic;font-family:'Playfair Display',serif">Each kid logs one observation per day. Saved to this device. Export the entire journal as text when you get home.</p>
+  <div id="journal-box"></div>
+</div>
+</section>
+
+<!-- MONEY -->
+<section id="money">
+<div class="section-pad">
+  <div class="s-head">
+    <span class="s-num">07 · Money</span>
+    <h2>Three tiers. <em>Live tracker.</em></h2>
+    <p>Pick a budget ceiling. Log every expense. Progress bar against your target.</p>
+  </div>
+  <div class="bt-grid">
+    <div class="bt-side">
+      <h4>The Three Tiers</h4>
+      <div class="bt-row"><b>Bare Bones · 14 days</b><span class="v">$2,250</span></div>
+      <div class="bt-row"><b>Moderate Comfort</b><span class="v">$3,700</span></div>
+      <div class="bt-row"><b>Epic Once-in-a-Lifetime</b><span class="v">$5,800</span></div>
+      <div class="bt-row" style="border:none;padding-top:1rem"><b style="color:var(--ash);font-size:.75rem">Set your target ceiling</b></div>
+      <select id="bt-target" style="width:100%;background:#0a0d10;border:1px solid var(--gold);padding:.7rem;color:var(--gold);font-family:inherit;border-radius:3px;font-size:.85rem">
+        <option value="2250">$2,250 · Bare Bones</option>
+        <option value="3700" selected>$3,700 · Moderate</option>
+        <option value="5800">$5,800 · Epic</option>
+        <option value="10000">$10,000 · No Ceiling</option>
+      </select>
+      <div style="margin-top:1.5rem">
+        <div class="bt-row tot"><b>Spent So Far</b><span class="v" id="bt-total">$0</span></div>
+        <div class="progress"><span id="bt-bar" style="width:0%"></span></div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--fog);margin-top:.5rem;letter-spacing:.1em" id="bt-remain">$3,700 remaining</div>
+      </div>
+    </div>
+    <div class="bt-side">
+      <h4>Log Expense</h4>
+      <div class="bt-form">
+        <input type="text" id="bt-desc" placeholder="What for?" />
+        <input type="number" id="bt-amt" placeholder="$0" step="0.01"/>
+        <select id="bt-cat">
+          <option>Fuel</option><option>Food</option><option>Camp</option>
+          <option>Park Fee</option><option>Laundry</option><option>Other</option>
+        </select>
+        <button class="btn sm" onclick="addExpense()">+</button>
+      </div>
+      <div class="bt-list" id="bt-list"></div>
+      <div style="text-align:right;margin-top:1rem">
+        <button class="btn sm red" onclick="if(confirm('Clear all expenses?')){LS.removeItem('expedExpenses');renderExpenses()}">Reset</button>
+      </div>
+    </div>
+  </div>
+  <h3 style="font-family:'Playfair Display',serif;font-size:1.6rem;color:var(--gold);margin:3rem 0 1rem;font-weight:400">Camp Cooking · seven mouths · cheap & glorious</h3>
+  <div class="recipes" id="recipes"></div>
+</div>
+</section>
+
+<!-- PACK -->
+<section id="pack">
+<div class="section-pad">
+  <div class="s-head">
+    <span class="s-num">08 · Pack</span>
+    <h2>What goes <em>in the truck.</em></h2>
+    <p>Every checkbox saves. Anything missing on departure morning is missing for 21 days.</p>
+  </div>
+  <div class="pack-progress" id="pack-pct">0 / 0 packed</div>
+  <div class="pack-grid" id="packing"></div>
+</div>
+</section>
+
+<!-- SAFE -->
+<section id="safe">
+<div class="section-pad">
+  <div class="s-head">
+    <span class="s-num">09 · Safety</span>
+    <h2>What can <em>kill you.</em><br>What to <em>do instead.</em></h2>
+    <p>Real protocols for real risks. The bear talk happens before the truck rolls.</p>
+  </div>
+  <div class="safe-grid" id="safety"></div>
+</div>
+</section>
+
+<!-- DASH -->
+<section id="dash">
+<div class="section-pad">
+  <div class="s-head">
+    <span class="s-num">10 · Live Dashboards</span>
+    <h2>Bookmark <em>these.</em></h2>
+    <p>The links that change every morning. Roads · weather · fire · air · park reservations.</p>
+  </div>
+  <div class="dash" id="dashboard"></div>
+</div>
+</section>
+
+<!-- CAREER -->
+<section id="career">
+<div class="section-pad">
+  <div class="s-head">
+    <span class="s-num">11 · The Career Layer</span>
+    <h2>AI work <em>from the road.</em></h2>
+    <p>Twenty-one days of content prompts. Networking targets by town. Music you make and own. The "off-grid deployment" flex. Twenty minutes of work a day on this and the trip pays for itself.</p>
+  </div>
+
+  <h3 style="font-family:'Playfair Display',serif;font-size:1.5rem;color:var(--gold);margin:1rem 0 1rem;font-weight:400">21 daily posts · tied to your real stops</h3>
+  <p style="color:var(--fog);font-size:.85rem;margin-bottom:1.5rem;font-style:italic;font-family:'Playfair Display',serif">Batch these before you leave. Each day you only have to add one photo from that day and hit post. Each post is a hook + an AI architecture insight drawn from what you're physically looking at.</p>
+  <div id="content-cal" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:1rem;margin-bottom:3rem"></div>
+
+  <h3 style="font-family:'Playfair Display',serif;font-size:1.5rem;color:var(--gold);margin:2rem 0 1rem;font-weight:400">Networking corridor · where to actually meet humans</h3>
+  <p style="color:var(--fog);font-size:.85rem;margin-bottom:1.5rem;font-style:italic;font-family:'Playfair Display',serif">Each town has one or two real nodes — chambers of commerce, coworking, libraries with Wi-Fi, small-business networks. Schedule 20-minute coffees a week ahead.</p>
+  <div class="dash" id="netnodes"></div>
+
+  <div class="divider" style="height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:4rem 0"></div>
+
+  <h3 style="font-family:'Playfair Display',serif;font-size:1.5rem;color:var(--gold);margin:1rem 0 1rem;font-weight:400">Own your soundtrack · AI music for the road</h3>
+  <p style="color:var(--fog);font-size:.9rem;margin-bottom:1.5rem;font-style:italic;font-family:'Playfair Display',serif">Suno and Udio generate full songs from a text prompt. Output is yours to use commercially under their paid tiers. Make a 21-track playlist seeded by each day of the trip — you own the masters, can license them out later, and the kids will literally be singing songs about the road they're on.</p>
+  <div id="music" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1rem;margin-bottom:2rem"></div>
+
+  <div class="divider" style="height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:4rem 0"></div>
+
+  <h3 style="font-family:'Playfair Display',serif;font-size:1.5rem;color:var(--gold);margin:1rem 0 1rem;font-weight:400">Field inquiry script · how to network without pitching</h3>
+  <div style="background:linear-gradient(180deg,#0f1418,#0a0d10);border:1px solid #1a2018;border-left:3px solid var(--gold);padding:1.5rem;border-radius:4px;max-width:840px;margin-bottom:2rem">
+    <p style="color:var(--cream);font-family:'Playfair Display',serif;font-style:italic;font-size:1.05rem;line-height:1.65;margin-bottom:1rem">"I'm mapping how small tourism and rural businesses handle bookings, websites, customer questions, and seasonal overload. I build practical AI and web systems. <b style="color:var(--gold);font-style:normal">I'm not selling anything today — I'm collecting patterns.</b> What's the most annoying digital problem you deal with?"</p>
+    <p style="color:var(--fog);font-size:.8rem;line-height:1.55">Use it on: campground owners, cabin rental owners, outfitters, shuttle operators, small museums, chamber directors, ranch-stay hosts, guides, small-town restaurant owners, gift shops with bad websites. Listen. Take notes. Get permission to follow up. <b style="color:var(--gold)">Don't pitch.</b> Three months from now one of them will hire you for a real build.</p>
+  </div>
+
+  <h3 style="font-family:'Playfair Display',serif;font-size:1.5rem;color:var(--gold);margin:2rem 0 1rem;font-weight:400">Pre-departure checklist · do these the week before you leave</h3>
+  <ul style="list-style:none;max-width:840px">
+    <li style="padding:.5rem 0;color:var(--cream);font-size:.9rem;padding-left:1.5rem;position:relative;line-height:1.6"><span style="position:absolute;left:0;color:var(--gold)">→</span> Write all 21 posts in a draft scheduler (Buffer free tier, or just a Notion doc)</li>
+    <li style="padding:.5rem 0;color:var(--cream);font-size:.9rem;padding-left:1.5rem;position:relative;line-height:1.6"><span style="position:absolute;left:0;color:var(--gold)">→</span> Reach out to 5 Missoula / Bozeman / Rapid City / Billings contacts NOW to schedule a coffee while you're nearby</li>
+    <li style="padding:.5rem 0;color:var(--cream);font-size:.9rem;padding-left:1.5rem;position:relative;line-height:1.6"><span style="position:absolute;left:0;color:var(--gold)">→</span> Set up Buffer / Hypefury / Typefully for queued posting — you won't have signal half the time</li>
+    <li style="padding:.5rem 0;color:var(--cream);font-size:.9rem;padding-left:1.5rem;position:relative;line-height:1.6"><span style="position:absolute;left:0;color:var(--gold)">→</span> Generate first 5 Suno tracks before you leave so you have road tunes from day one</li>
+    <li style="padding:.5rem 0;color:var(--cream);font-size:.9rem;padding-left:1.5rem;position:relative;line-height:1.6"><span style="position:absolute;left:0;color:var(--gold)">→</span> Open a fresh GitHub repo: <code style="background:#0a0d10;padding:.2rem .4rem;color:var(--amber);font-family:'JetBrains Mono',monospace;font-size:.78rem">erwin-to-paradise-2026</code> — log everything from the trip (photos, GPS, notes) into it nightly. The repo itself becomes a portfolio piece.</li>
+    <li style="padding:.5rem 0;color:var(--cream);font-size:.9rem;padding-left:1.5rem;position:relative;line-height:1.6"><span style="position:absolute;left:0;color:var(--gold)">→</span> Download offline maps + Wikipedia for every state — Wikipedia goes a long way out there</li>
+  </ul>
+</div>
+</section>
+
+<footer>
+  <div class="sig">— The Expedition · Built for Jennifer · 2026 —</div>
+  <p>WRENTECH · Erwin → Paradise · A field document, not a brochure</p>
+  <p style="margin-top:.6rem;color:#1a2e1a">Drive safe. Camp dark. Document everything.</p>
+</footer>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+  integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script>
+/* === SAFE STORAGE === Some preview iframes / file:// contexts throw SecurityError on
+   localStorage access. Wrap it so the page renders no matter what. */
+const LS = (function(){
+  try {
+    if(typeof window === 'undefined' || !window.localStorage) throw new Error();
+    window.localStorage.setItem('__t__','1');
+    window.localStorage.removeItem('__t__');
+    return window.localStorage;
+  } catch(e){
+    console.warn('localStorage blocked — using in-memory fallback. Progress will not persist between reloads.');
+    const mem = {};
+    return {
+      getItem(k){ return Object.prototype.hasOwnProperty.call(mem,k) ? mem[k] : null; },
+      setItem(k,v){ mem[k] = String(v); },
+      removeItem(k){ delete mem[k]; }
+    };
+  }
+})();
+
+/* === DATA === */
+
+const PHOTO = {
+  hero:'https://upload.wikimedia.org/wikipedia/commons/f/f6/Going-to-the-Sun_Road_-_Glacier_National_Park.jpg',
+  badlands:'https://upload.wikimedia.org/wikipedia/commons/b/b9/MK00609_Badlands.jpg',
+  trnp:'https://upload.wikimedia.org/wikipedia/commons/3/34/View_of_Theodore_Roosevelt_National_Park.jpg',
+  devilstower:'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Columnar-jointed_porphyritic_phonolite_%28Eocene%2C_49_Ma%3B_Devils_Tower%2C_Wyoming%2C_USA%29_48.jpg/3840px-Columnar-jointed_porphyritic_phonolite_%28Eocene%2C_49_Ma%3B_Devils_Tower%2C_Wyoming%2C_USA%29_48.jpg',
+  bighorn:'https://upload.wikimedia.org/wikipedia/commons/thumb/b/bf/Big_Horn_Mountains%2C_Wyoming_02.jpg/3840px-Big_Horn_Mountains%2C_Wyoming_02.jpg',
+  granite:'https://upload.wikimedia.org/wikipedia/commons/c/c5/Granite_Peak_Montana_2.jpg',
+  lamar:'https://upload.wikimedia.org/wikipedia/commons/7/7d/LamarRiver1998.jpg',
+  lamarbuf:'https://upload.wikimedia.org/wikipedia/commons/4/4d/Lamar_Buffalo_Ranch_in_landscape.jpg',
+  twomed:'https://upload.wikimedia.org/wikipedia/commons/4/46/Two_Medicine_Lake.jpg',
+  manyglac:'https://upload.wikimedia.org/wikipedia/commons/1/1a/Lakeside_View_%2811415064175%29.jpg',
+  stmary:'https://upload.wikimedia.org/wikipedia/commons/7/7e/St_Mary_Lake.jpg',
+  logan:'https://upload.wikimedia.org/wikipedia/commons/5/58/Logan_Pass-27527.jpg',
+  goat:'https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/Mountain_Goat_at_Hidden_Lake.jpg/3840px-Mountain_Goat_at_Hidden_Lake.jpg',
+  kootenai:'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/Kootenai_Falls_2019-07-13.jpg/3840px-Kootenai_Falls_2019-07-13.jpg',
+  clark:'https://upload.wikimedia.org/wikipedia/commons/9/9e/Fall_Clark_Fork.jpg',
+  bison:'https://upload.wikimedia.org/wikipedia/commons/8/8d/American_bison_k5680-1.jpg',
+  grizzly:'https://upload.wikimedia.org/wikipedia/commons/a/a9/GrizzlyBearJeanBeaufort.jpg',
+  elk:'https://upload.wikimedia.org/wikipedia/commons/6/60/Roosevelt_Elk_at_Northwest_Trek.jpg',
+  pronghorn:'https://upload.wikimedia.org/wikipedia/commons/a/a3/Antilocapra_americana.jpg'
+};
+
+const SCENES = [
+  { tag:'Day 2 · Hidden Gem', title:'Garden of the Gods', em:'in the cornfields', where:'Shawnee National Forest · Illinois · 37.6042° N, 88.4013° W',
+    text:'Three hundred and twenty million years ago, this was a coastal swamp. The hoodoos are the bones of an ancient river system. Eastern dark sky. Your first night of real stars.',
+    bg:PHOTO.badlands, // closest visual; badland-like
+    data:[
+      {h:'Cost',v:'Free'},{h:'Crowd',v:'3/10'},
+      {h:'Sleep',v:'<a href="https://www.fs.usda.gov/recarea/shawnee/recarea/?recid=10726" target="_blank">Pharaoh CG $10 ↗</a>'},
+      {h:'Best at',v:'Golden hour 6:45 PM'}], rank:'Hidden Gem'},
+  { tag:'Days 4–5 · Worthwhile', title:'The Badlands', em:'shatter the prairie', where:'Badlands NP, SD · 43.8554° N, 102.3397° W',
+    text:'Seventy-five million years old, eroding at one inch a year. The Cretaceous ocean was here. A mosasaur swam over your tent. Sleep at Sage Creek and bison will walk through camp at dawn.',
+    bg:PHOTO.badlands,
+    data:[
+      {h:'Cost',v:'$30 / pass'},{h:'Crowd',v:'6/10'},
+      {h:'Sleep',v:'<b>Sage Creek FREE</b> · 43.9919, -102.5417'},
+      {h:'Best at',v:'Sunrise 5:30 AM'}], rank:'Worthwhile'},
+  { tag:'Days 6–7 · Hidden Gem', title:'Theodore Roosevelt', em:'the wild horses', where:'TRNP, North Dakota · 46.9483° N, 103.5270° W',
+    text:'Underground coal seams have been burning here for centuries, baking clay into orange ceramic — they call it scoria. Bison herds, wild horses, prairie dog towns. One-tenth of Yellowstone\'s crowds.',
+    bg:PHOTO.trnp,
+    data:[
+      {h:'Cost',v:'$30 / pass'},{h:'Crowd',v:'3/10'},
+      {h:'Sleep',v:'Little Missouri Grassland FR-3 · free'},
+      {h:'Link',v:'<a href="https://www.nps.gov/thro/" target="_blank">nps.gov/thro ↗</a>'}], rank:'Hidden Gem'},
+  { tag:'Day 7 · Worthwhile', title:'Devils Tower', em:'the sacred stone', where:'Wyoming · 44.5902° N, 104.7156° W',
+    text:'A laccolithic butte — the cooled magma throat of an ancient volcanic system, exposed by fifty million years of erosion. Hexagonal columns from contraction as it cooled. The same physics as drying mud. Sacred to the Lakota, Cheyenne, and Kiowa. Your Fourth of July at dusk, with the prairie and stars.',
+    bg:PHOTO.devilstower,
+    data:[
+      {h:'Cost',v:'$25 / pass'},{h:'Crowd',v:'5/10'},
+      {h:'Sleep',v:'Belle Fourche CG $20 OR Black Hills NF free'},
+      {h:'Best at',v:'Sunset · then full dark stars'}], rank:'Worthwhile'},
+  { tag:'Days 8–9 · Hidden Gem', title:'The Bighorns', em:'sky island', where:'Bighorn NF, Wyoming · 44.4080° N, 107.3040° W',
+    text:'The most underrated range in America. Thirteen-thousand-foot peaks. An alpine ecosystem stranded in the high plains. You will see more moose than people. Camp at 9,000 feet for free. Sit at Powder River Pass and watch sagebrush turn to tundra in twenty miles.',
+    bg:PHOTO.bighorn,
+    data:[
+      {h:'Cost',v:'Free'},{h:'Crowd',v:'2/10'},
+      {h:'Sleep',v:'FR-14 dispersed (free)'},
+      {h:'Link',v:'<a href="https://www.fs.usda.gov/bighorn" target="_blank">Bighorn NF ↗</a>'}], rank:'Hidden Gem'},
+  { tag:'Day 10 · Worthwhile', title:'Beartooth Highway', em:'top of the world', where:'US-212 · MT/WY · 45.0218° N, 109.4136° W',
+    text:'Sixty-eight miles climbing from 5,500 feet to 10,947. The largest landmass above 10,000 feet in the contiguous United States. Two hundred glacial lakes. Snow patches in July. The rock under your feet is 2.7 BILLION years old — among the oldest exposed rock on Earth.',
+    bg:PHOTO.granite,
+    data:[
+      {h:'Cost',v:'Free drive'},{h:'Crowd',v:'6/10'},
+      {h:'Sleep',v:'Island Lake CG · 10,000 ft'},
+      {h:'Best at',v:'Dawn at Beartooth Lake'}], rank:'Worthwhile'},
+  { tag:'Day 11 · Hidden Gem', title:'Paradise Valley', em:'and the Lamar', where:'Gallatin NF, Montana · 45.50° N, 110.55° W',
+    text:'Wolves were reintroduced here in 1995. They didn\'t just eat elk — they changed where elk could stand. Creekside trees grew back. Beavers returned. Rivers re-channeled themselves. One species rebuilt a watershed. It\'s called a trophic cascade.',
+    bg:PHOTO.lamar,
+    data:[
+      {h:'Cost',v:'Free camping in NF'},{h:'Crowd',v:'2/10'},
+      {h:'Sleep',v:'FR-137 along Yellowstone River · free'},
+      {h:'Treat',v:'Chico Hot Springs $10 · kid-safe'}], rank:'Hidden Gem'},
+  { tag:'Days 12–13 · Non-negotiable', title:'Glacier', em:'the crown', where:'Glacier NP, MT · 48.6967° N, 113.7180° W',
+    text:'One million acres. Twenty-five glaciers left, down from a hundred and fifty in 1850. The Lewis Overthrust moved 1.4-billion-year-old rock fifty miles eastward, on top of 70-million-year-old rock. Old rock above young rock. Geology turned upside down. Bear spray on every adult.',
+    bg:PHOTO.stmary,
+    data:[
+      {h:'Cost',v:'$35 / pass'},{h:'Crowd',v:'7/10'},
+      {h:'Sleep',v:'<a href="https://www.recreation.gov/camping/campgrounds/232493" target="_blank">Two Medicine · RESERVE NOW ↗</a>'},
+      {h:'Best at',v:'5:45 AM Many Glacier dock'}], rank:'Worthwhile'},
+  { tag:'Day 14 · Arrival', title:'Paradise', em:'Montana', where:'Sanders County, MT · 47.3834° N, 114.7992° W',
+    text:'Population two hundred. The Clark Fork River meets the Cabinet Mountains. No tourists. No chain stores. Just rivers and trees. You arrive before noon on July 11. Then seven days to do nothing but rest.',
+    bg:PHOTO.clark,
+    data:[
+      {h:'Cost',v:'Local'},{h:'Crowd',v:'1/10'},
+      {h:'Sleep',v:'Lolo NF dispersed (free) OR Quinn\'s cabins $180'},
+      {h:'Link',v:'<a href="https://www.quinnshotsprings.com" target="_blank">Quinn\'s ↗</a>'}], rank:'Hidden Gem'}
+];
+
+const DAYS = [
+  { n:1, date:'Sun · Jun 28', from:'Erwin, TN', to:'Big South Fork, TN/KY',
+    miles:260, hrs:5.0, theme:'Departure · the old mountains',
+    drive:'I-26 → I-40 W → Cumberland Plateau via Crossville. Two-lane through Jamestown into the gorge.',
+    sleep:'<b>Bandy Creek Campground</b> · Big South Fork NRRA · ~$22/night · OR free dispersed in Daniel Boone NF',
+    gps:'36.4910, -84.6960',
+    do:['Twin Arches Trailhead (45 min loop) — kids see their first natural arches','East Rim Overlook · gorge plunges 500 ft','Set up camp by 6pm · first campfire · stove test'],
+    url:'https://www.nps.gov/biso/index.htm',urlname:'nps.gov/biso',
+    homework:'The Appalachians are 480 million years old — older than bones, older than trees, older than fish on land. Have the kids stand on the rim and say out loud: "This rock was here before vertebrates."',
+    food:'Sandwiches on the road · campfire chili (pre-made, frozen, thaws in cooler)'},
+  { n:2, date:'Mon · Jun 29', from:'Big South Fork',to:'Shawnee NF, IL',
+    miles:380, hrs:6.5, theme:'Crossing the Mississippi',
+    drive:'KY-Western through Paducah → cross Ohio River → US-45 N to Shawnee NF.',
+    sleep:'<b>Pharaoh Campground</b> · Shawnee NF · $10/night · OR free dispersed on FR-345',
+    gps:'37.6042, -88.4013',
+    do:['Arrive Garden of the Gods by 5pm','Sunset on Observation Trail (0.25 mi, paved)','Star walk after dinner — first true dark sky'],
+    url:'https://www.fs.usda.gov/recarea/shawnee/recarea/?recid=10726',urlname:'Shawnee NF',
+    homework:'These hoodoos are 320 million years old — Pennsylvanian sandstone, cross-bedded river deposits when Illinois was a coastal swamp.',
+    food:'Dollar General resupply en route · pasta + jar sauce tonight'},
+  { n:3, date:'Tue · Jun 30', from:'Shawnee NF',to:'Missouri / Iowa transit',
+    miles:430, hrs:7.0, theme:'Push day · prairie crossing',
+    drive:'MO-34/I-70/US-71 — long mileage day. Move by 7am.',
+    sleep:'<b>USACE Pomme de Terre Lake</b> (MO) · $14/night · OR free at Mark Twain NF dispersed FR-216',
+    gps:'37.8950, -93.3120',
+    do:['Drive day — audiobook, podcast','Stop at Lake of the Ozarks if kids need a swim','Late dinner · early bed'],
+    url:'https://www.recreation.gov/camping/gateways/2725',urlname:'USACE Pomme de Terre',
+    homework:'Mile counter math: kids estimate distance, you check the odometer. Winner gets dessert.',
+    food:'Cold sandwiches · one-pot rice & beans tonight'},
+  { n:4, date:'Wed · Jul 1', from:'Missouri',to:'Badlands NP, SD',
+    miles:560, hrs:8.5, theme:'Crossing into the West',
+    drive:'I-29 N through Sioux Falls → I-90 W. Watch the trees thin. Watch the sky open.',
+    sleep:'<b>Sage Creek Primitive Campground</b> · Badlands NP · <b>FREE</b> · first-come · bison wander through camp',
+    gps:'43.9919, -102.5417',
+    do:['Push hard. Gas up at Wall, SD before entering park','Drive into Sage Creek by twilight · DO NOT speed · bison on road','Look UP. Bortle 2 dark sky. Milky Way overhead.'],
+    url:'https://www.nps.gov/badl/planyourvisit/sagecreek.htm',urlname:'NPS · Sage Creek',
+    homework:'You\'re sleeping on 75-million-year-old marine deposits. A mosasaur swam over your tent.',
+    food:'Gas station resupply at Wall · grilled cheese & tomato soup'},
+  { n:5, date:'Thu · Jul 2', from:'Badlands',to:'Badlands (full day)',
+    miles:50, hrs:1.5, theme:'Deep time · fossil day',
+    drive:'Loop the Badlands Loop Road · 39 miles · every overlook',
+    sleep:'<b>Sage Creek</b> again (FREE)',
+    gps:'43.9919, -102.5417',
+    do:['SUNRISE at Big Badlands Overlook · be there 5:15am','Door Trail boardwalk + scramble','Fossil Exhibit Trail kid-perfect','Afternoon SHADE break · heat is real','Sunset at Pinnacles Overlook'],
+    url:'https://www.nps.gov/badl/index.htm',urlname:'nps.gov/badl',
+    homework:'The Badlands erode at <b>1 inch per year</b>. "That much rock disappears every six years." Ask: "How tall was this butte when George Washington was president?"',
+    food:'Cold pasta salad lunch · burgers & corn tonight'},
+  { n:6, date:'Fri · Jul 3', from:'Badlands',to:'TRNP South Unit',
+    miles:280, hrs:5.0, theme:'Bison country · TR\'s ranch',
+    drive:'I-90 W → US-85 N at Belle Fourche · two-lane North Dakota',
+    sleep:'<b>Cottonwood Campground</b> ~$20 · OR free Little Missouri Grassland FR-3',
+    gps:'46.9483, -103.5270',
+    do:['Wall Drug donuts (5 min stop only)','Arrive Medora by 3pm','Scenic Loop · 36 miles · bison jams · prairie dog town','Sunset at Wind Canyon Overlook'],
+    url:'https://www.nps.gov/thro/index.htm',urlname:'nps.gov/thro',
+    homework:'Underground coal seams have burned here for centuries. The orange "scoria" rock is clay turned to ceramic by buried coal fires.',
+    food:'Lunch in Medora (Boots Bar) · campfire kebabs'},
+  { n:7, date:'Sat · Jul 4', from:'TRNP',to:'Devils Tower',
+    miles:340, hrs:6.0, theme:'Sacred stone at sunset',
+    drive:'US-85 N → TRNP North Unit briefly → I-94 W → Devils Tower by 7pm',
+    sleep:'<b>Belle Fourche Campground</b> $20 · OR Black Hills NF FR-205 free',
+    gps:'44.5902, -104.7156',
+    do:['TRNP North Unit AM · Oxbow + River Bend overlooks','Long drive west','Arrive Devils Tower 6:30pm · NO crowds at dusk · Tower Trail 1.3 mi','Stay until full dark · YOUR 4TH OF JULY'],
+    url:'https://www.nps.gov/deto/index.htm',urlname:'nps.gov/deto',
+    homework:'Devils Tower is an igneous intrusion — magma cooled inside the earth, exposed by 50 million years of erosion. The columns? Hexagonal cooling cracks.',
+    food:'Cold lunch · campfire foil-pack dinner (sausage, potato, onion)'},
+  { n:8, date:'Sun · Jul 5', from:'Devils Tower',to:'Bighorn Mountains',
+    miles:240, hrs:5.0, theme:'Into the alpine',
+    drive:'US-14 W from Sundance → Buffalo → climb US-14 over Granite Pass',
+    sleep:'<b>Sibley Lake Campground</b> ~$15 · OR FR-26 dispersed (free)',
+    gps:'44.7900, -107.4500',
+    do:['Morning Devils Tower walk one more time','Drive US-14 W · climbing 4,000 ft','Picnic at Shell Falls overlook','High camp · jackets out · 50°F at night'],
+    url:'https://www.fs.usda.gov/bighorn',urlname:'USFS Bighorn',
+    homework:'Each 1,000 ft of altitude = 3.5°F cooler. Calculate the temperature drop.',
+    food:'Resupply at Buffalo · pasta + sausage · foil-bananas with chocolate'},
+  { n:9, date:'Mon · Jul 6', from:'Bighorns',to:'Bighorns',
+    miles:70, hrs:2.5, theme:'Medicine Wheel',
+    drive:'FR-12 to Medicine Wheel · 1.5 mi walk at 9,642 ft',
+    sleep:'Sibley Lake OR West Tensleep dispersed (free, alpine, granite, cold trout water)',
+    gps:'44.8266, -107.9211',
+    do:['Drive up to Medicine Wheel · 1.5 mi walk · 28-spoke stone circle','Picnic at Burgess Junction','Afternoon alpine lake hike','BIG dark sky · Bortle 1 · stay up till midnight'],
+    url:'https://www.fs.usda.gov/recarea/bighorn/recarea/?recid=30418',urlname:'USFS Medicine Wheel',
+    homework:'The 28 spokes = lunar month days. Cairns align with Aldebaran, Rigel, Sirius rising at 28-day intervals. A star clock in stone, pre-telescope.',
+    food:'Picnic above tree line · chicken & rice'},
+  { n:10, date:'Tue · Jul 7', from:'Bighorns',to:'Beartooth · Custer Gallatin NF',
+    miles:260, hrs:6.0, theme:'The most beautiful drive in America',
+    drive:'US-14 W → I-90 W to Billings → US-212 S to Red Lodge → climb Beartooth',
+    sleep:'<b>Beartooth Lake</b> ~$20 · OR FR-2071 dispersed free',
+    gps:'44.9462, -109.5945',
+    do:['Lunch in Red Lodge · ice, water, fuel','11 miles of switchbacks to 10,947 ft','Stop EVERY pullout · alpine tundra · snowbanks in July','Camp at alpine lake · expect 40°F overnight'],
+    url:'https://www.fs.usda.gov/recarea/custergallatin/recarea/?recid=37625',urlname:'USFS Beartooth',
+    homework:'2.7 BILLION-year-old rock under your feet. Then look down at 10,000-year-old glacier lakes. Two and a half billion years of difference in one view.',
+    food:'Hot lunch in Red Lodge · cold cuts tonight'},
+  { n:11, date:'Wed · Jul 8', from:'Beartooth',to:'Paradise Valley',
+    miles:170, hrs:4.0, theme:'Yellowstone-edge · without crowds',
+    drive:'US-212 W into Cooke City → NE Yellowstone → Lamar Valley → Mammoth → US-89 N',
+    sleep:'<b>Pine Creek</b> Gallatin NF ~$18 · OR FR-137 dispersed free along Yellowstone River',
+    gps:'45.4960, -110.5530',
+    do:['Drive Lamar Valley DAWN · America\'s Serengeti','Stay in the truck for wildlife · 100 yards minimum','Mammoth Hot Springs terraces · 1 hour MAX','North into Paradise Valley','Soak at <b>Chico Hot Springs</b> $10 · kid-safe'],
+    url:'https://www.chicohotsprings.com',urlname:'Chico Hot Springs',
+    homework:'Lamar wolves were reintroduced 1995. Trees grew back. Beavers returned. Rivers changed course. One species rebuilt a watershed. Trophic cascade.',
+    food:'Lunch picnic in Yellowstone · dinner at Chico if budget allows'},
+  { n:12, date:'Thu · Jul 9', from:'Paradise Valley',to:'Glacier East',
+    miles:330, hrs:5.5, theme:'North to the ice',
+    drive:'US-89 N · Livingston → Helena → I-15 N → US-2 W → US-89 N → East Glacier',
+    sleep:'<b>Two Medicine</b> $23 · <b>RESERVE NOW</b> at recreation.gov · backup: Cut Bank free FCFS',
+    gps:'48.4875, -113.3670',
+    do:['Big drive day · plains to mountains','Detour: Ringing Rocks near Whitehall (+30 min, weird science)','Arrive East Glacier by 5pm · settle in','Evening walk on Two Medicine Lake'],
+    url:'https://www.recreation.gov/camping/campgrounds/232493',urlname:'Two Medicine reserve',
+    homework:'Lewis Overthrust moved 1.4-billion-year-old rock 50 miles eastward, on top of 70-million-year-old rock. Old rock now sits on top of young rock.',
+    food:'Resupply Browning IGA · simple pasta tonight'},
+  { n:13, date:'Fri · Jul 10', from:'Glacier',to:'Many Glacier',
+    miles:80, hrs:2.5, theme:'The crown jewel',
+    drive:'East Glacier → US-89 N → Babb → Many Glacier Road',
+    sleep:'<b>Many Glacier</b> $23 · RESERVE · OR back to Two Medicine',
+    gps:'48.7986, -113.6570',
+    do:['Dawn drive · Swiftcurrent Lake 5:45am for alpenglow on Mt Grinnell','Hike to Redrock Falls · 4.4 mi RT, mostly flat','Lunch lakeside','BEAR PROTOCOL ACTIVE · spray, noise, food in box','Evening at Many Glacier Hotel porch · free, best view'],
+    url:'https://www.nps.gov/glac/index.htm',urlname:'nps.gov/glac',
+    homework:'Glacier had ~150 glaciers in 1850. ~25 today. Find USGS Grinnell 1910 vs 2020. "What do you think it looks like in 2050?"',
+    food:'PB&J trail lunch · pizza in Babb if needed'},
+  { n:14, date:'Sat · Jul 11', from:'Glacier',to:'PARADISE, MT',
+    miles:280, hrs:4.5, theme:'Arrival',
+    drive:'East Glacier → US-2 W → Kalispell → I-90 W → US-200 W along the Clark Fork → Paradise',
+    sleep:'Quinn\'s area cabins from $180 · OR free Lolo NF along Clark Fork',
+    gps:'47.3834, -114.7992',
+    do:['Stop at Kootenai Falls · swinging bridge · 30 min','Long descent into western Montana through timber','Arrive Paradise BEFORE NOON · July 11','Unpack. Breathe. Laundromat in Plains. Real food.','Sunset on the Clark Fork · trip is officially complete'],
+    url:'https://www.quinnshotsprings.com',urlname:'Quinn\'s Hot Springs',
+    homework:'Final tally: how many ecosystems crossed (Appalachian forest, karst Ozark, tallgrass remnant, shortgrass, badlands, ponderosa Black Hills, alpine Bighorn, tundra Beartooth, Yellowstone river, glacial cirque, Clark Fork timber). Eleven. Write it.',
+    food:'Real restaurant for arrival lunch · whatever you want'},
+  { n:15, date:'Sun · Jul 12', from:'Paradise',to:'Paradise',
+    miles:0, hrs:0, theme:'Recovery',
+    drive:'No driving.',sleep:'Same',gps:'47.3834, -114.7992',
+    do:['Sleep until you sleep enough','Quinn\'s Hot Springs day pass ~$15/person','Catch up on laundry · groceries · kid baths'],
+    url:'https://www.quinnshotsprings.com',urlname:'Quinn\'s',
+    homework:'Rest. Tomorrow they\'ll surprise you with what they remember.',food:'Cookout at camp'},
+  { n:16, date:'Mon · Jul 13', from:'Paradise',to:'Bitterroot day',
+    miles:120, hrs:3.0, theme:'Bitterroot recon',drive:'South on US-93',sleep:'Back to Paradise',gps:'46.2520, -114.1620',
+    do:['Drive south into Bitterroot · Trapper Peak views','Lake Como swim (cold, clear, granite-bottom · safe)','Hamilton farmers market if it\'s a market day'],
+    url:'https://www.fs.usda.gov/bitterroot',urlname:'USFS Bitterroot',
+    homework:'Why are Bitterroots so jagged and Bighorns so rolling? Granite (hard, sharp) vs sedimentary (eroded smoother).',food:'Picnic at Lake Como'},
+  { n:17, date:'Tue · Jul 14', from:'Paradise',to:'Garnet Ghost Town',
+    miles:140, hrs:3.5, theme:'Ghost town',drive:'East on Lolo NF dirt road',sleep:'Back to Paradise',gps:'46.8200, -113.3380',
+    do:['Drive to Garnet · Montana\'s best-preserved ghost town · BLM · $3/person','Walk the old main street · saloon, school, miner cabins','Picnic on site'],
+    url:'https://www.blm.gov/visit/garnet-ghost-town',urlname:'BLM Garnet',
+    homework:'Garnet boomed 1898–1905, then died when gold ran out. Count buildings. Imagine 1,000 people living there. Ask: "What did everyone do all day in 1900?"',food:'Trail food at ghost town'},
+  { n:18, date:'Wed · Jul 15', from:'Paradise',to:'Holland Lake',
+    miles:140, hrs:3.5, theme:'Lakes day',drive:'North to Holland Lake',sleep:'Back to Paradise',gps:'47.4530, -113.6320',
+    do:['Holland Lake hike to Holland Falls · 3 mi RT · waterfall','Picnic lakeside','Polebridge Mercantile bakery on the way back'],
+    url:'https://www.fs.usda.gov/flathead',urlname:'USFS Flathead',
+    homework:'Mission Mountains were carved by the same Pleistocene glaciers as Glacier NP — same age, fewer crowds.',food:'Bakery treats · campfire dinner'},
+  { n:19, date:'Thu · Jul 16', from:'Paradise',to:'Missoula day',
+    miles:60, hrs:1.5, theme:'Network / remote work',drive:'Into Missoula',sleep:'Back to Paradise',gps:'46.8721, -113.9940',
+    do:['Missoula library or Imagine Nation Brewing for Wi-Fi','Coffee with a Missoula founder · book ahead','Bookstore (Fact & Fiction) for kids'],
+    url:'https://www.missoulachamber.com',urlname:'Missoula Chamber',
+    homework:'Kids day off. Library card. Free time.',food:'El Cazador for tacos · cheap & legendary'},
+  { n:20, date:'Fri · Jul 17', from:'Paradise',to:'River day',
+    miles:0, hrs:0, theme:'Float the Clark Fork',drive:'No driving',sleep:'Last night',gps:'47.3834, -114.7992',
+    do:['Inner tube the Clark Fork · slow, cold, clean','Last campfire','Pack the truck for the long drive home'],
+    url:'#',urlname:'(local)',
+    homework:'Each kid says one sentence: "The thing I will not forget is ___."',food:'Last big cookout · use up everything'},
+  { n:21, date:'Sat · Jul 18', from:'Paradise',to:'Begin return (TBD)',
+    miles:'??', hrs:'??', theme:'End of trip',drive:'Departure direction is your call',sleep:'TBD',gps:'47.3834, -114.7992',
+    do:['Trip is officially over · everything past this is bonus','If driving back: plan 4 days minimum · I-90 makes it 2,000 mi'],
+    url:'#',urlname:'(your choice)',
+    homework:'Sit down with the kids. Open the field journal. Read every entry out loud. The trip is now permanent.',food:'Whatever you want.'}
+];
+
+const SCHOOL = [
+  { tag:'Day 1', name:'Deep Time · the old mountains', text:'You\'re starting on rock 480 million years old. Older than vertebrates on land. The Appalachians were once the height of the Himalayas.',
+    hw:'<b>Build a deep-time timeline.</b> Lay out a 12-ft string in the yard. Mark Earth\'s age at 0. Appalachians at 480 mya (~7%). Dinosaurs (230–66 mya). Humans (last 0.04 in).'},
+  { tag:'Day 2', name:'Sedimentary stratigraphy', text:'Cross-bedding in sandstone records ancient river currents in stone — frozen ripples from 320 million years ago.',
+    hw:'<b>Make sand layers in a clear bottle.</b> Different colors. Show how heavy grains settle first. That\'s what they\'re seeing on a cliff face.'},
+  { tag:'Days 4-5', name:'Paleontology · reading bone', text:'The Badlands erode at 1 inch per year. Every storm exposes new fossils. You\'re looking at the actual Cretaceous-Paleogene transition — the moment dinosaurs went extinct.',
+    hw:'<b>Iridium layer demo.</b> Show kids a photo of the K-T boundary clay band. Above = no dinosaurs. Below = dinosaurs.'},
+  { tag:'Day 7', name:'Igneous geology', text:'When magma cools, it contracts. The contraction cracks in hexagonal columns — like drying mud, but in molten rock.',
+    hw:'<b>Make cracking mud.</b> Wet a tray of clay. Let it dry in the sun. Watch the hexagons form. That\'s what the tower did 50 million years ago, but with rock.'},
+  { tag:'Day 9', name:'Archaeoastronomy', text:'Indigenous people built a precise astronomical instrument out of stone at 9,642 ft, before telescopes existed. 28 spokes = lunar month days. Cairns align with three stars at 28-day intervals.',
+    hw:'<b>Astronomy app challenge.</b> Use Stellarium. Find Aldebaran, Rigel, Sirius. Explain that 28 days separate when each rises before the sun.'},
+  { tag:'Day 10', name:'Glacial geomorphology', text:'The plateau is a remnant erosional surface — flat because glaciers shaved off the peaks. The surrounding peaks are sharp because they were carved INTO.',
+    hw:'<b>Glacier sandbox.</b> Build a small ice cube with sand and gravel frozen in it. Drag it across a pan of flour. Show how it carves grooves and piles moraines.'},
+  { tag:'Day 11', name:'Trophic cascade', text:'Wolves reintroduced 1995. They didn\'t just eat elk. They changed where elk could stand. Trees grew back. Beavers returned. Rivers stabilized. One species reshaped a watershed.',
+    hw:'<b>Web of life diagram.</b> On paper: wolf → elk → trees → beavers → river → fish → birds. Erase the wolf. Erase everything that depended on it. That\'s 70 years without wolves.'},
+  { tag:'Days 12-13', name:'Climate change', text:'~150 glaciers in 1850. ~25 today. USGS has done repeat photography for over a century. The difference is staggering.',
+    hw:'<b>Predict 2050.</b> Have kids sketch what they think Grinnell will look like in 25 years. Save the drawing. They will be 20-something when that year arrives.'}
+];
+
+const BINGO_POOL = ['Bison','Pronghorn','Hay bale','Train','Windmill','Tractor','Red barn','Dead tree','Hawk on wire','Cow','Horse','Mountains','River','Lake','Tunnel','Bridge','Plate from 5+ states','Out-of-state RV','Motorcycle','Truck stop','American flag','Highway elev sign','Rest area','Construction zone','Sunset','Rain on windshield','Hawk hunting','Prairie dog','Mile marker 100','Eagle','Antelope','Sheep','Coyote','Mule deer','Pickup with hay','Big sky','Smoke from fire','Wildflowers','Stop sign in middle of nowhere','Single tree on hill','Snow patch in July','Tumbleweed','Cattle guard','Open gate','Closed gate','Welcome to (state) sign','Town under 1000','Gas station no canopy','Drone in sky'];
+
+const WILDLIFE = [
+  {p:PHOTO.bison,n:'American Bison',l:'Sage Creek · TRNP · Lamar Valley',d:'25 yd distance · sprints 35 mph'},
+  {p:PHOTO.grizzly,n:'Grizzly Bear',l:'Glacier · Bighorns · from vehicle only',d:'100 yd · bear spray ready'},
+  {p:PHOTO.elk,n:'Elk',l:'TRNP · Glacier · Bighorns',d:'25 yd · big antlers in fall rut'},
+  {p:PHOTO.pronghorn,n:'Pronghorn',l:'Wyoming plains · TRNP',d:'Fastest land mammal in N America'},
+  {p:PHOTO.goat,n:'Mountain Goat',l:'Glacier · Hidden Lake · Logan Pass',d:'Cliff specialists · 10,000+ ft'},
+  {p:'https://upload.wikimedia.org/wikipedia/commons/f/f6/Going-to-the-Sun_Road_-_Glacier_National_Park.jpg',n:'Bighorn Sheep',l:'Badlands · Bighorns',d:'Massive curved horns · 25 yd'},
+  {p:PHOTO.devilstower,n:'Black Bear',l:'Bighorns · Glacier (also)',d:'Smaller than grizzly · 100 yd'},
+  {p:PHOTO.lamar,n:'Gray Wolf',l:'Lamar Valley · dawn only',d:'Hike with bear spray · binos'},
+  {p:PHOTO.bighorn,n:'Coyote',l:'Anywhere · all routes',d:'Smaller than wolf · solo or pair'},
+  {p:PHOTO.granite,n:'Marmot',l:'Bighorns · Beartooth above 9000 ft',d:'Whistles when scared · cute'},
+  {p:PHOTO.clark,n:'Beaver',l:'Yellowstone River · Lamar',d:'Watch dusk on still water'},
+  {p:PHOTO.trnp,n:'Prairie Dog',l:'TRNP · Devils Tower',d:'Plague-carrying fleas · DO NOT TOUCH'},
+  {p:PHOTO.badlands,n:'Mule Deer',l:'Everywhere west of Mississippi',d:'Big ears that swivel · common'},
+  {p:PHOTO.kootenai,n:'Bald Eagle',l:'Glacier · Bighorns · rivers',d:'White head + tail · adults only'},
+  {p:PHOTO.lamarbuf,n:'Great Horned Owl',l:'Camp at night',d:'Listen for hooting after dark'},
+  {p:PHOTO.stmary,n:'Common Loon',l:'Two Medicine Lake · Glacier',d:'Eerie call across alpine lakes'},
+  {p:PHOTO.manyglac,n:'Brook Trout',l:'Bighorn alpine lakes',d:'Native trout in cold streams'},
+  {p:PHOTO.logan,n:'Pika',l:'Beartooth · talus slopes',d:'Tiny rabbit cousin · alpine only'},
+  {p:PHOTO.twomed,n:'Moose',l:'Bighorns · Glacier wetlands',d:'BIGGEST danger animal · 50 yd'},
+  {p:PHOTO.devilstower,n:'Rattlesnake',l:'Badlands · TRNP grasslands',d:'Watch where you step · don\'t reach'},
+  {p:PHOTO.bighorn,n:'Mountain Bluebird',l:'Bighorn meadows',d:'Brilliant blue · perches on fence wire'},
+  {p:PHOTO.lamar,n:'Sandhill Crane',l:'Yellowstone · Paradise Valley',d:'Tall + loud rattling call'},
+  {p:PHOTO.granite,n:'Monarch Butterfly',l:'MO milkweeds · Tallgrass',d:'Orange + black · 2000 mi migration'},
+  {p:PHOTO.kootenai,n:'Cutthroat Trout',l:'Yellowstone · Bighorn lakes',d:'Native · red slash under jaw'}
+];
+
+const STATES = ['AL','AK','AZ','AR','CA','CO','CT','DE','FL','GA','HI','ID','IL','IN','IA','KS','KY','LA','ME','MD','MA','MI','MN','MS','MO','MT','NE','NV','NH','NJ','NM','NY','NC','ND','OH','OK','OR','PA','RI','SC','SD','TN','TX','UT','VT','VA','WA','WV','WI','WY','DC'];
+
+const QUIZ = [
+  { q:'How old is Devils Tower itself?', opts:['~50 million years','~5,000 years','~500 million years','~5 billion years'], correct:0, fb:'About 50 million years old — a cooled magma intrusion exposed by erosion of the softer surrounding rock.'},
+  { q:'Why is the Beartooth Plateau flat at 10,000+ ft while peaks around it are sharp?', opts:['Wind erosion','Glaciers shaved the plateau but carved INTO the surrounding peaks','Volcanic origin','Earthquakes'], correct:1, fb:'Glaciers eroded the plateau surface (smoothing) and dug INTO the high peaks (sharpening). Classic alpine glaciation.'},
+  { q:'How many glaciers does Glacier NP have today vs 1850?', opts:['Same — about 150','About 25 today, down from ~150','None left','About 500 now'], correct:1, fb:'~25 today, down from ~150 in 1850. USGS has tracked it with repeat photography for over a century.'},
+  { q:'How fast does the Badlands erode?', opts:['~1 inch per year','~1 inch per century','~1 mile per year','It doesn\'t erode anymore'], correct:0, fb:'About 1 inch per year. The buttes will be gone in geologic eye-blink time.'},
+  { q:'What\'s special about Medicine Wheel\'s 28 spokes?', opts:['Random count','Lunar month days + alignment with summer solstice','Decorative','Number of tribes'], correct:1, fb:'28 = days in a lunar month. The wheel aligns with summer solstice sunrise and the rising of Aldebaran, Rigel, Sirius at 28-day intervals. A star clock in stone.'},
+  { q:'What causes columnar jointing at Devils Tower?', opts:['Earthquakes','Magma contracting as it cools — same physics as drying mud','Wind','Glaciers'], correct:1, fb:'Hot rock contracts as it cools. Cracks form hexagons — most efficient pattern. Same reason mud cracks in hexagons.'},
+  { q:'Why is Lamar Valley called "America\'s Serengeti"?', opts:['It\'s hot','Highest density of large mammals — bison, elk, wolves, bears, pronghorn','It\'s in Africa','Just a fun nickname'], correct:1, fb:'Largest concentration of big mammals in the lower 48 — all in one valley.'},
+  { q:'What was reintroduced to Yellowstone in 1995 that changed entire river systems?', opts:['Beavers','Wolves','Bison','Salmon'], correct:1, fb:'Wolves. They changed elk behavior, trees grew back, beavers returned, river channels stabilized. "Trophic cascade."'},
+  { q:'How old is the rock at Beartooth Pass (Archean gneiss)?', opts:['~10,000 years','~10 million years','~100 million years','~2.7 billion years'], correct:3, fb:'~2.7 BILLION years — some of the oldest exposed rock on Earth. Older than multicellular life.'},
+  { q:'What carved Two Medicine Lake\'s U-shaped valley?', opts:['Rivers','Glaciers','Tectonic uplift','Volcanic activity'], correct:1, fb:'Glaciers. U-shape = glacier (rivers make V-shapes). Flat-bottomed valley + steep walls = classic alpine glaciation.'},
+  { q:'What is the Lewis Overthrust?', opts:['A bear type','Old rock pushed eastward 50 miles, sitting on top of younger rock','A famous overlook','A fault that doesn\'t exist'], correct:1, fb:'1.4-billion-year-old rock thrust EASTWARD 50 miles on top of 70-million-year-old rock. Old rock above young. Geology inverted.'},
+  { q:'Best time for landscape photography with warm side-lighting?', opts:['Noon','Golden hour (just after sunrise / just before sunset)','Midnight','Random'], correct:1, fb:'Golden hour — sun is low, light is warm and red-shifted, shadows are long, textures pop.'}
+];
+
+const CONSTELLATIONS = {
+  'Big Dipper':{ stars:[[15,30],[28,28],[40,32],[52,38],[60,50],[55,62],[42,68]],
+    lines:[[0,1],[1,2],[2,3],[3,4],[4,5],[5,6]],
+    fact:'The two outer stars of the cup point straight at Polaris, the North Star. Find it once, and you can navigate without GPS forever.'},
+  'Cassiopeia':{ stars:[[20,40],[30,28],[42,38],[54,26],[65,40]],
+    lines:[[0,1],[1,2],[2,3],[3,4]],
+    fact:'The W shape. Opposite Polaris from the Big Dipper. When one is high, the other is low — they rotate around the North Star together.'},
+  'Cygnus the Swan':{ stars:[[40,20],[45,38],[50,56],[55,72],[30,48],[68,48]],
+    lines:[[0,1],[1,2],[2,3],[4,1],[1,5]],
+    fact:'Flies south down the Milky Way in summer. Deneb — its brightest star — is one of the most luminous stars visible: 200,000x brighter than the Sun.'},
+  'Scorpius':{ stars:[[15,25],[22,30],[30,35],[38,42],[45,52],[48,65],[55,72],[60,68],[58,55]],
+    lines:[[0,1],[1,2],[2,3],[3,4],[4,5],[5,6],[6,7],[7,8]],
+    fact:'Antares — its red heart — is a red supergiant 700x the diameter of the Sun. Best seen low in the southern sky in July at full dark.'},
+  'Lyra · the Harp':{ stars:[[40,20],[50,32],[58,28],[60,42],[48,42]],
+    lines:[[0,1],[1,2],[2,3],[3,4],[4,1]],
+    fact:'Home to Vega — one of the brightest stars in the northern sky. The Lyrid meteor shower comes from this constellation every April.'},
+  'Hercules':{ stars:[[25,30],[35,25],[45,30],[42,42],[35,52],[28,42],[55,20],[20,20]],
+    lines:[[0,1],[1,2],[2,3],[3,4],[4,5],[5,0],[2,6],[0,7]],
+    fact:'Look for the four central stars — the "Keystone." Between them is M13, a globular cluster of 300,000 stars 22,000 light years away.'}
+};
+
+const RECIPES = [
+  { title:'Foil-Pack Dinner', when:'Devils Tower · Day 7', when2:'Any campfire night',
+    items:['1 smoked sausage per person, sliced','1 potato per person, diced','Half onion per pack','Pat of butter','Salt, pepper, garlic powder','Heavy-duty foil'],
+    method:'Layer everything on a 12" sheet of foil. Wrap into a sealed packet. Toss into campfire coals for 25 min. Flip once.'},
+  { title:'One-Pot Pasta', when:'Transit nights', when2:'Days 2, 3, 12',
+    items:['1 lb pasta','1 jar marinara','1 lb ground sausage or chickpeas','Olive oil, salt','Parmesan if cooler is cold'],
+    method:'Brown meat in big pot. Add pasta, sauce, and water to cover. Boil 12 min stirring. Feeds 7 cheap.'},
+  { title:'Grilled Cheese & Tomato Soup', when:'Badlands · Day 4', when2:'Cold nights',
+    items:['Loaf bread','1 lb cheddar','Butter','2 cans tomato soup','Splash of cream if you have it'],
+    method:'Heat soup in pot. Toast sandwiches in pan with butter, both sides. Comfort food after 8-hour drive.'},
+  { title:'Campfire Kebabs', when:'TRNP · Day 6', when2:'Easy adult-friendly',
+    items:['Steak or sausage chunks','Bell pepper, onion, mushroom, zucchini','Olive oil + Italian seasoning','Metal skewers'],
+    method:'Cube everything. Skewer alternating. Salt heavy. Grill over coals 6 min per side.'},
+  { title:'Cold Pasta Salad', when:'Lunch any drive day',when2:'Days 5, 9, 11',
+    items:['1 lb cooked rotini (night before)','Bottle Italian dressing','Cherry tomatoes, cucumber, olives','Cubed cheese, salami','Salt heavy'],
+    method:'Make at camp the night before. Eat cold from cooler the next day at a picnic. No reheat.'},
+  { title:'Foil Bananas with Chocolate', when:'Dessert · any campfire',when2:'Kid favorite',
+    items:['1 banana per kid','Chocolate chips','Mini marshmallows','Foil'],
+    method:'Slit banana lengthwise (don\'t cut through skin). Stuff with chips + marshmallows. Wrap in foil. 8 min in coals. Eat with a spoon.'}
+];
+
+const PACKING = {
+  'Sleep / Camp':['7 sleeping bags rated to 30°F','7 sleeping pads','Pillows or stuff sacks','Tarp / vehicle window covers','Tent if backup needed','Camp pillow per kid'],
+  'Cook':['2-burner camp stove','3 lbs propane','12" cast iron skillet','One large stockpot, one small','Plates, cups, bowls × 8','Sharp knife, cutting board','Long tongs, spatula','Dish bin, biodegradable soap','Heavy-duty foil (full roll)','Lighter × 3, waterproof matches'],
+  'Cooler / Food':['Large cooler + secondary','Block ice (lasts longer than cube)','Frozen meals as ice on Day 1','Bulk: pasta, rice, beans, oats, bread','PB, jelly, tortillas, eggs, butter','Salt, pepper, garlic powder, hot sauce'],
+  'Water':['5-gallon jug × 4','Water filter (Sawyer or Katadyn)','Iodine tablets backup','Water bottle per kid'],
+  'Safety · Critical':['<b style="color:var(--gold)">Bear spray × 3 cans</b>','First aid kit (real one)','Sunscreen SPF 50','Bug spray DEET','Headlamp + batteries × 7','Emergency blanket × 7','Whistle on every kid','Tire repair kit + compressor','Jumper cables','Tow strap','Quart oil, gallon coolant'],
+  'Nav · Tech':['Paper Rand McNally atlas','Gaia GPS or CalTopo downloaded','Phone charger + car inverter','Battery bank (10000 mAh)','Weather radio','America the Beautiful Pass · $80','Cash $200 for camp / no-card sites'],
+  'Kid kit':['Field journal × 4 kids','Pencils, colored pencils, sharpener','Binoculars × 2','Magnifying glass / hand lens × 2','Tablet · this site loaded · downloaded movies','Books they can\'t put down','Stuffed animal (don\'t skip this)','Card games · Uno / Skipbo'],
+  'Clothes per person':['3 quick-dry shirts','2 pants + 1 shorts','1 fleece + 1 puffy + 1 rain shell','7 underwear / 7 socks','Hiking shoes + sandals','Hat with brim','Warm hat for Beartooth'],
+  'Documents':['Driver licenses','Insurance cards','Vehicle registration','Emergency contacts list','Copies in glovebox AND cloud']
+};
+
+const SAFETY = [
+  { cat:'danger', icon:'🐻', title:'Grizzly bears',
+    items:['Bighorns, Beartooth, Paradise Valley, GLACIER · core habitat','100 yards from any bear. Period.','Bear spray on every adult, on belt, ready','Make noise on every trail — talk loud, sing, hike in groups','All food, toothpaste, sunscreen in bear box. Always.','No food in tent. Ever. Not a granola bar wrapper.','If a bear charges: spray at 30 ft. Stand ground. Do not run.','Sleep with bear spray reachable.']},
+  { cat:'danger', icon:'🦬', title:'Bison',
+    items:['Sage Creek, TRNP, Lamar Valley','25 yards minimum. They look slow. They sprint 35 mph.','Never approach for a photo','In Sage Creek at night: kids inside vehicle','If one is on the road: wait. Do not honk. Do not pass close.']},
+  { cat:'warn', icon:'⛈️', title:'Lightning above treeline',
+    items:['Above 9,000 ft: storms build by 1pm','Be off ridges and summits by NOON','Bighorns, Beartooth, Glacier · all real risk','If caught: crouch low, separate from group, off metal']},
+  { cat:'warn', icon:'☀️', title:'Heat & dehydration',
+    items:['Badlands, TRNP · no shade, 100°F+','1 gallon water per person per day MINIMUM','Hike sunrise or sunset only','Kids show signs first — flushed face, no sweat, irritable','Sand surfaces hit 150°F at midday']},
+  { cat:'warn', icon:'💧', title:'Water safety',
+    items:['NO swimming in warm stagnant water (algae, amoebas)','Cold flowing rivers/alpine lakes only — hypothermia in 30 min in glacial water','Filter ALL stream water for drinking','Chico Hot Springs is safe — exchanged daily','Skip unmanaged hot springs — never put face under water']},
+  { cat:'info', icon:'🚗', title:'Driving',
+    items:['Beartooth Highway: switchbacks, no guardrails, gear-down','Sage Creek Rd in rain = impassable clay','High clearance helpful on FS roads','Fuel up every chance west of Wall, SD','Paper map — cell dies in the Bighorns and Glacier']},
+  { cat:'info', icon:'🌬️', title:'Smoke & fire',
+    items:['Check <a href="https://www.airnow.gov" target="_blank">AirNow</a> every morning','Check <a href="https://inciweb.nwcg.gov" target="_blank">InciWeb</a> for active incidents','MT/WY fire bans in August — confirm','If AQI > 150: skip stop, move on, lungs matter more']},
+  { cat:'danger', icon:'⚠️', title:'Edge fall',
+    items:['Devils Tower · Glacier · Black Canyon · many overlooks have no railing','Children within arm\'s reach at all overlooks. Always.','Hold hand on cliff trails. No exceptions.','Wet rock = slick rock.']}
+];
+
+const CONTENT_CAL = [
+  { day:'Jun 28', loc:'Erwin · Day 1', hook:'"480 million years of mountain at my back. Here we go."', insight:'Start-of-trip narrative post · LinkedIn + X · personal manifesto for the 21 days · pin to top of profile.', tags:'#BuildInPublic #FieldDeployment'},
+  { day:'Jun 29', loc:'Garden of the Gods · Day 2', hook:'"Hoodoos in the cornfields. Illinois, of all places."', insight:'Lead with the visual surprise — 320M-year-old sandstone in flat farmland. Connect to: "the most interesting AI is in the places nobody looks."', tags:'#AI #Geology'},
+  { day:'Jun 30', loc:'Missouri transit · Day 3', hook:'"500 miles today. Cell signal dropping. Files syncing on the slow side."', insight:'Behind-the-scenes of working remote at scale. Photo of laptop on a folding table at a campsite. Pair with a note on offline-first architecture.', tags:'#RemoteWork #OffGrid'},
+  { day:'Jul 1', loc:'Badlands sunset · Day 4', hook:'"Bison walked through camp tonight. So did the Milky Way."', insight:'Dark sky photo + a thought on signal-to-noise. The desert is where you can hear yourself think. Same for codebases.', tags:'#DeepWork'},
+  { day:'Jul 2', loc:'Badlands fossils · Day 5', hook:'"The Badlands erode an inch a year. That butte will be gone in 1,000 summers."', insight:'A meditation on technical debt. Some systems erode visibly. Others erode invisibly. Both are real.', tags:'#SystemsThinking'},
+  { day:'Jul 3', loc:'Theodore Roosevelt · Day 6', hook:'"Wild horses, coal seam fires burning underground for centuries, and zero crowds."', insight:'The "Yellowstone alternative" play — a metaphor for choosing the less-obvious AI stack. The hidden gem beats the hype.', tags:'#ContrarianTake'},
+  { day:'Jul 4', loc:'Devils Tower at dusk · Day 7', hook:'"4th of July at a 50-million-year-old volcanic neck. No fireworks. Just stars."', insight:'Igneous columns from cooling contraction — same physics as drying mud. Code analogy: emergent structure from simple rules.', tags:'#Geology #SystemsThinking'},
+  { day:'Jul 5', loc:'Bighorns · Day 8', hook:'"The most underrated mountain range in America. 13,000 ft and zero people."', insight:'Underrated-tech post. List 3 AI tools / techniques that should be more famous than they are. Photo of empty alpine road.', tags:'#AI #UnderratedTech'},
+  { day:'Jul 6', loc:'Medicine Wheel · Day 9', hook:'"A pre-telescope star clock built in stone at 9,642 ft."', insight:'Indigenous archaeoastronomy → ancient pattern recognition. Tie to the fact that "AI" pattern-matching is much older than LLMs. Respectful, sourced, thoughtful.', tags:'#Astronomy #AI #History'},
+  { day:'Jul 7', loc:'Beartooth Pass · Day 10', hook:'"Pushed a commit from 10,947 ft. The deploy succeeded."', insight:'The off-grid deployment flex. Photo of the Starlink dish + laptop above tree line. Proves your stack is portable.', tags:'#OffGridDeploy #BuildInPublic'},
+  { day:'Jul 8', loc:'Lamar Valley · Day 11', hook:'"Wolves came back in \'95. The rivers literally changed course."', insight:'Trophic cascade post → the same shape as a well-placed AI intervention. One small change in the right spot rewrites the whole graph.', tags:'#Ecology #SystemsThinking'},
+  { day:'Jul 9', loc:'Approaching Glacier · Day 12', hook:'"Two billion years of rock pushed on top of seventy million years. Old above young. Geology turned upside down."', insight:'The Lewis Overthrust as a metaphor for legacy code. Sometimes the older system wins by physical force.', tags:'#LegacySystems #Engineering'},
+  { day:'Jul 10', loc:'Many Glacier · Day 13', hook:'"150 glaciers in 1850. 25 today. The repeat photography is staggering."', insight:'Climate AI angle — repeat photography + computer vision = change detection at scale. Link to the USGS dataset.', tags:'#ClimateAI #ComputerVision'},
+  { day:'Jul 11', loc:'Paradise arrival · Day 14', hook:'"2,580 miles. 11 ecosystems. Three small children. We made it."', insight:'Arrival post. Carousel of best 10 photos. Tag your network. Pin this one. End of outbound chapter.', tags:'#BuildInPublic #FamilyEdition'},
+  { day:'Jul 12', loc:'Paradise · rest', hook:'"What changed in 14 days of driving and thinking."', insight:'Reflection essay. Long-form post or Substack. The clarity arrives on day one of stillness.', tags:'#DeepWork #Writing'},
+  { day:'Jul 13', loc:'Bitterroot day', hook:'"Granite vs sedimentary mountains. Different rocks, different shapes."', insight:'Why your architecture choices show up years later. Hard rock keeps sharp lines. Soft rock rolls.', tags:'#Architecture'},
+  { day:'Jul 14', loc:'Garnet ghost town', hook:'"Population 1,000 in 1900. Zero in 1920. What ended this town."', insight:'Post-mortem post. Boomtown patterns in the AI gold rush. Which AI companies are Garnet?', tags:'#AI #StartupLessons'},
+  { day:'Jul 15', loc:'Holland Lake', hook:'"Glaciers carved this 10,000 years ago. The shape is permanent."', insight:'Decisions you make this year that lock in for a decade. Carry a real photo of the U-shaped valley.', tags:'#StrategicThinking'},
+  { day:'Jul 16', loc:'Missoula · network day', hook:'"Coffee meeting with a Montana founder. Notes attached."', insight:'After the meeting — write a public summary (with permission). Build the network in public.', tags:'#Networking #BuildInPublic'},
+  { day:'Jul 17', loc:'Clark Fork float', hook:'"Day 20. Inner-tubing a river my kids will remember forever."', insight:'Life-work integration post. The trip is the work. The work is the life. Photo with kids in tubes.', tags:'#FamilyFirst #BuildInPublic'},
+  { day:'Jul 18', loc:'End of trip', hook:'"21 days. 21 posts. Here\'s the lesson list."', insight:'Wrap-up carousel. One image + one lesson per day. Pin to top. This becomes a portfolio centerpiece.', tags:'#BuildInPublic #FieldDeployment'}
+];
+
+const NETNODES = [
+  { tag:'Rapid City · SD · Day 4', name:'Elevate Rapid City · regional chamber', url:'https://www.elevaterapidcity.com/'},
+  { tag:'Rapid City · Library', name:'RC Public Library · Wi-Fi work day', url:'https://rapidcitylibrary.org/'},
+  { tag:'Sheridan · WY · Day 8', name:'Sheridan County Chamber', url:'https://www.sheridanwyomingchamber.org/'},
+  { tag:'Billings · MT · Day 10', name:'Billings Chamber of Commerce', url:'https://www.billingschamber.com/'},
+  { tag:'Bozeman · Day 11', name:'Prospera · Bozeman entrepreneur hub', url:'https://www.prosperabusinessnetwork.org/'},
+  { tag:'Bozeman · Day 11', name:'MSU Blackstone LaunchPad', url:'https://www.montana.edu/blackstone/'},
+  { tag:'Kalispell · Day 12', name:'Kalispell Chamber', url:'https://www.kalispellchamber.com/'},
+  { tag:'Missoula · Day 19', name:'Missoula Economic Partnership', url:'https://www.missoulapartnership.com/'},
+  { tag:'Missoula · Day 19', name:'Blackstone LaunchPad · UM', url:'https://www.umt.edu/launchpad/'},
+  { tag:'Missoula · Wi-Fi node', name:'Imagine Nation Brewing · workday spot', url:'https://imaginenationbrewing.com/'},
+  { tag:'Missoula · coffee', name:'Florence Coffee Co.', url:'https://florencecoffee.com/'},
+  { tag:'Field inquiry · all stops', name:'"What\'s the most annoying digital problem you deal with?"', url:'#'}
+];
+
+const MUSIC = [
+  { title:'Suno · the easy entry', text:'<a href="https://suno.com" target="_blank">suno.com</a> · Pro tier $10/mo unlocks commercial use & you own the masters. Use the "Custom" tab — paste lyrics + genre tags. Try: "Appalachian banjo · folk · road trip · upbeat · 2 minutes."'},
+  { title:'Udio · higher fidelity', text:'<a href="https://www.udio.com" target="_blank">udio.com</a> · Standard tier ~$10/mo for commercial rights. Better at extending tracks past the 2-min mark. Good for longer drive tunes.'},
+  { title:'Track 1 · "Erwin to Wherever"', text:'Genre: Americana, banjo, slide guitar, female vocal · 100 BPM · sunny departure energy · refrain: "the road is older than the map."'},
+  { title:'Track 5 · "Sage Creek Stars"', text:'Genre: ambient folk, soft strings, no drums · 70 BPM · for a kid asleep in the back at midnight · refrain: "the buffalo are sleeping too."'},
+  { title:'Track 7 · "Sacred Stone at Sunset"', text:'Genre: cinematic Americana, big drums coming in halfway, harmonized vocals · 90 BPM · about Devils Tower at dusk · sacred + electric.'},
+  { title:'Track 10 · "Top of the World" (Beartooth)', text:'Genre: orchestral folk, strings, building crescendo · 80 BPM · the climb to 10,947 ft · refrain: "everything below is small."'},
+  { title:'Track 14 · "Made It to Paradise"', text:'Genre: warm country, sparse guitar, family harmonies · 95 BPM · arrival anthem · could literally play this when you pull into town July 11.'},
+  { title:'Ownership note', text:'Both Suno (Pro) and Udio (Standard) grant the user full commercial rights to outputs. Save the song file AND your prompt — your prompt is part of the IP trail. License the tracks on AudioJungle or Pond5 later for passive income.'}
+];
+
+const DASHBOARDS = [
+  { tag:'Roads', name:'MT 511', url:'https://511mt.net/'},
+  { tag:'Roads', name:'WY 511', url:'https://wyoroad.info/'},
+  { tag:'Roads', name:'SD 511', url:'https://sd511.org/'},
+  { tag:'Roads', name:'ND 511', url:'https://travel.dot.nd.gov/'},
+  { tag:'Air', name:'AirNow · AQI', url:'https://www.airnow.gov/'},
+  { tag:'Fire', name:'InciWeb · active fires', url:'https://inciweb.nwcg.gov/'},
+  { tag:'Weather', name:'NWS Forecast', url:'https://www.weather.gov/'},
+  { tag:'Reserve', name:'Recreation.gov', url:'https://www.recreation.gov/'},
+  { tag:'Park', name:'Glacier NPS', url:'https://www.nps.gov/glac/'},
+  { tag:'Park', name:'Badlands NPS', url:'https://www.nps.gov/badl/'},
+  { tag:'Park', name:'Theodore Roosevelt', url:'https://www.nps.gov/thro/'},
+  { tag:'Park', name:'Devils Tower', url:'https://www.nps.gov/deto/'},
+  { tag:'Pass', name:'America the Beautiful · $80', url:'https://store.usgs.gov/recreation-passes'},
+  { tag:'Forest', name:'USFS Bighorn', url:'https://www.fs.usda.gov/bighorn'},
+  { tag:'Forest', name:'USFS Custer Gallatin', url:'https://www.fs.usda.gov/custergallatin'},
+  { tag:'Forest', name:'USFS Lolo', url:'https://www.fs.usda.gov/lolo'},
+  { tag:'Safety', name:'CDC · algal blooms', url:'https://www.cdc.gov/harmful-algal-blooms/about/index.html'},
+  { tag:'Safety', name:'Bear spray · NPS', url:'https://www.nps.gov/subjects/bears/bear-spray.htm'}
+];
+
+const MAP_PINS = [
+  { lat:36.149, lng:-82.418, name:'Erwin, TN', type:'start', day:'Day 0 · Start', url:'#' },
+  { lat:36.491, lng:-84.696, name:'Big South Fork', type:'transit', day:'Day 1', url:'https://www.nps.gov/biso/' },
+  { lat:37.604, lng:-88.401, name:'Garden of the Gods', type:'anchor', day:'Day 2', url:'https://www.fs.usda.gov/recarea/shawnee/recarea/?recid=10726' },
+  { lat:37.895, lng:-93.312, name:'Pomme de Terre, MO', type:'transit', day:'Day 3', url:'#' },
+  { lat:43.992, lng:-102.542, name:'Sage Creek · Badlands', type:'boondock', day:'Days 4-5', url:'https://www.nps.gov/badl/' },
+  { lat:43.855, lng:-102.340, name:'Pinnacles Overlook', type:'anchor', day:'Day 5', url:'https://www.nps.gov/badl/' },
+  { lat:46.948, lng:-103.527, name:'Theodore Roosevelt NP South', type:'anchor', day:'Day 6', url:'https://www.nps.gov/thro/' },
+  { lat:47.593, lng:-103.336, name:'TRNP North Unit', type:'anchor', day:'Day 7 AM', url:'https://www.nps.gov/thro/' },
+  { lat:44.590, lng:-104.716, name:'Devils Tower', type:'anchor', day:'Day 7 PM', url:'https://www.nps.gov/deto/' },
+  { lat:44.790, lng:-107.450, name:'Bighorns · Sibley Lake', type:'boondock', day:'Day 8', url:'https://www.fs.usda.gov/bighorn' },
+  { lat:44.827, lng:-107.921, name:'Medicine Wheel', type:'anchor', day:'Day 9', url:'https://www.fs.usda.gov/recarea/bighorn/recarea/?recid=30418' },
+  { lat:44.946, lng:-109.594, name:'Beartooth Lake', type:'boondock', day:'Day 10', url:'https://www.fs.usda.gov/recarea/custergallatin/recarea/?recid=37625' },
+  { lat:45.022, lng:-109.414, name:'Beartooth Pass · 10,947 ft', type:'anchor', day:'Day 10', url:'#' },
+  { lat:45.496, lng:-110.553, name:'Paradise Valley', type:'boondock', day:'Day 11', url:'https://www.fs.usda.gov/custergallatin' },
+  { lat:48.487, lng:-113.367, name:'Two Medicine · Glacier', type:'anchor', day:'Day 12', url:'https://www.recreation.gov/camping/campgrounds/232493' },
+  { lat:48.799, lng:-113.657, name:'Many Glacier', type:'anchor', day:'Day 13', url:'https://www.nps.gov/glac/' },
+  { lat:48.456, lng:-115.763, name:'Kootenai Falls', type:'transit', day:'Day 14', url:'https://www.fs.usda.gov/kootenai' },
+  { lat:47.383, lng:-114.799, name:'PARADISE, MT', type:'end', day:'Day 14 arrival', url:'#' }
+];
+
+/* ============ RUNTIME ============ */
+
+// LOADER fade
+window.addEventListener('load', () => setTimeout(() => document.getElementById('loader').classList.add('gone'), 1900));
+
+// COUNTDOWN
+(function(){
+  const target = new Date('2026-06-28T07:00:00');
+  function tick(){
+    const diff = target - new Date();
+    if(diff<0){ document.getElementById('cd').innerHTML = '<b>ON THE ROAD</b>'; return; }
+    const d = Math.floor(diff/86400000);
+    const h = Math.floor(diff/3600000)%24;
+    const m = Math.floor(diff/60000)%60;
+    document.getElementById('cd').innerHTML = 'T-MINUS <b>'+d+'d '+h+'h '+m+'m</b>';
+  }
+  tick(); setInterval(tick, 30000);
+})();
+
+// NAV
+(function(){
+  let last = window.scrollY;
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', ()=>{
+    const cur = window.scrollY;
+    if(cur > last && cur > 200) nav.classList.add('hidden');
+    else nav.classList.remove('hidden');
+    last = cur;
+    const ids = ['hero','scenes','map','days','games','wildlife','school','money','pack','safe'];
+    let active = 'hero';
+    ids.forEach(id => {
+      const el = document.getElementById(id);
+      if(el && el.getBoundingClientRect().top < 200) active = id;
+    });
+    document.querySelectorAll('.nav-links a').forEach(a=>{
+      a.classList.toggle('active', a.getAttribute('href')==='#'+active);
+    });
+  });
+})();
+document.querySelectorAll('.nav-links a').forEach(a => {
+  a.addEventListener('click', e => {
+    const tgt = document.querySelector(a.getAttribute('href'));
+    if(tgt){ e.preventDefault(); tgt.scrollIntoView({behavior:'smooth'}); }
+  });
+});
+
+// ============ SCENES (cinematic) ============
+(function(){
+  const wrap = document.getElementById('scenes');
+  SCENES.forEach((s,idx) => {
+    const el = document.createElement('section');
+    el.className = 'scene';
+    el.innerHTML = `
+      <div class="scene-bg"><img src="${s.bg}" alt="${s.title}" loading="${idx<2?'eager':'lazy'}"/></div>
+      <div class="scene-inner">
+        <div class="scene-tag">${s.tag}</div>
+        <h2 class="scene-title">${s.title}<em>${s.em}</em></h2>
+        <div class="scene-where">${s.where}</div>
+        <p class="scene-text">${s.text}</p>
+        <div class="scene-data">
+          ${s.data.map(d => `<div class="sd-cell"><h5>${d.h}</h5><div>${d.v}</div></div>`).join('')}
+        </div>
+        <span class="scene-rank">${s.rank}</span>
+      </div>`;
+    wrap.appendChild(el);
+  });
+})();
+
+// ============ MAP ============
+(function(){
+  if(typeof L === 'undefined'){ console.warn('Leaflet not loaded'); return; }
+  const map = L.map('map', { zoomControl:true, scrollWheelZoom:false }).setView([45.5, -103], 5);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom:18, attribution:'© OpenStreetMap contributors'
+  }).addTo(map);
+  const colors = { start:'#e8a547', anchor:'#c9a64c', boondock:'#5cb85c', transit:'#5bc0de', end:'#e8a547' };
+  const path = [];
+  MAP_PINS.forEach(p => {
+    const big = p.type === 'anchor' || p.type === 'end' || p.type === 'start';
+    const m = L.circleMarker([p.lat, p.lng], {
+      radius: big ? 9 : 6, fillColor: colors[p.type], color:'#fff',
+      weight: big ? 2.5 : 1.5, fillOpacity:0.95
+    }).addTo(map);
+    m.bindPopup(
+      '<h4>'+p.name+'</h4>'+
+      '<div style="color:#c9a64c;font-size:.7rem;letter-spacing:.15em;margin-bottom:.3rem">'+p.day.toUpperCase()+'</div>'+
+      '<div class="gps">'+p.lat.toFixed(4)+'° N, '+Math.abs(p.lng).toFixed(4)+'° W</div>'+
+      (p.url !== '#' ? '<div style="margin-top:.5rem"><a href="'+p.url+'" target="_blank">Open link →</a></div>' : '')
+    );
+    path.push([p.lat, p.lng]);
+  });
+  L.polyline(path, { color:'#c9a64c', weight:2.5, opacity:0.9, dashArray:'4,4' }).addTo(map);
+  map.fitBounds(path, { padding:[40,40] });
+  map.on('focus', ()=> map.scrollWheelZoom.enable());
+  map.on('blur', ()=> map.scrollWheelZoom.disable());
+})();
+
+// ============ TIMELINE ============
+(function(){
+  const tl = document.getElementById('timeline');
+  DAYS.forEach(d => {
+    const el = document.createElement('div');
+    el.className = 'day';
+    const dotN = (typeof d.miles === 'number') ? d.miles : '—';
+    const dotH = (typeof d.hrs === 'number') ? d.hrs : '—';
+    el.innerHTML = `
+      <div class="day-head">
+        <div class="day-num">${d.n}<small>${d.n<=14?'OUT':'PARADISE'}</small></div>
+        <div class="day-date">${d.date}<small>${d.from} → ${d.to}</small></div>
+        <div class="day-title">${d.theme}<em>${d.from} · ${d.to}</em></div>
+        <div class="day-stat"><b>${dotN}</b> mi<br/><b>${dotH}</b> hr</div>
+      </div>
+      <div class="day-body"><div class="day-inner">
+        <div class="dcol">
+          <h4>Drive plan</h4><p>${d.drive}</p>
+          <h4 style="margin-top:1.3rem">Sleep tonight</h4><p>${d.sleep}</p>
+          <p style="margin-top:.4rem"><span class="gps-coord">${d.gps}</span></p>
+        </div>
+        <div class="dcol">
+          <h4>Today's moves</h4>
+          <ul>${d.do.map(x=>'<li>'+x+'</li>').join('')}</ul>
+          <h4 style="margin-top:1.3rem">Live link</h4>
+          <p><a href="${d.url}" target="_blank">${d.urlname} ↗</a></p>
+        </div>
+        <div class="dcol">
+          <h4>Food</h4><p>${d.food}</p>
+          <div class="hwork">${d.homework}</div>
+        </div>
+      </div></div>`;
+    el.querySelector('.day-head').addEventListener('click', ()=> el.classList.toggle('open'));
+    tl.appendChild(el);
+  });
+})();
+
+// ============ SOUND + CONFETTI ============
+window.SOUND_ON = LS.getItem('soundOn') !== 'false';
+let audioCtx = null;
+function beep(freq, dur, vol=0.06, type='sine'){
+  if(!window.SOUND_ON) return;
+  try{
+    if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const o = audioCtx.createOscillator(); const g = audioCtx.createGain();
+    o.type = type; o.frequency.value = freq;
+    g.gain.value = vol;
+    g.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + dur);
+    o.connect(g); g.connect(audioCtx.destination);
+    o.start(); o.stop(audioCtx.currentTime + dur);
+  }catch(e){}
+}
+function sfxTap(){ beep(880, 0.05, 0.04); }
+function sfxOK(){ beep(660, 0.12, 0.06); setTimeout(()=>beep(990, 0.18, 0.06), 80); }
+function sfxBig(){ beep(523, 0.1, 0.06); setTimeout(()=>beep(659, 0.1, 0.06), 100); setTimeout(()=>beep(784, 0.1, 0.06), 200); setTimeout(()=>beep(1046, 0.3, 0.08), 300); }
+function sfxFail(){ beep(220, 0.2, 0.05, 'square'); }
+
+const cnv = document.getElementById('confetti');
+const cctx = cnv.getContext('2d');
+function resizeCanvas(){ cnv.width = window.innerWidth; cnv.height = window.innerHeight; }
+resizeCanvas(); window.addEventListener('resize', resizeCanvas);
+let particles = [];
+function confetti(count = 80, colors = ['#c9a64c','#e8a547','#f3c969','#ede8db','#5cb85c']){
+  for(let i=0;i<count;i++){
+    particles.push({
+      x: window.innerWidth/2, y: window.innerHeight/2,
+      vx: (Math.random()-0.5)*15,
+      vy: -Math.random()*15 - 5,
+      g: 0.4 + Math.random()*0.3,
+      size: 6 + Math.random()*6,
+      color: colors[Math.floor(Math.random()*colors.length)],
+      rot: Math.random()*360, vr: (Math.random()-0.5)*20,
+      life: 100 + Math.random()*60
+    });
+  }
+  if(particles.length === count) animateConfetti();
+}
+function animateConfetti(){
+  cctx.clearRect(0,0,cnv.width,cnv.height);
+  particles = particles.filter(p=>{
+    p.x += p.vx; p.y += p.vy; p.vy += p.g; p.rot += p.vr; p.life--;
+    cctx.save();
+    cctx.translate(p.x, p.y); cctx.rotate(p.rot * Math.PI/180);
+    cctx.fillStyle = p.color;
+    cctx.fillRect(-p.size/2, -p.size/2, p.size, p.size * 0.6);
+    cctx.restore();
+    return p.life > 0 && p.y < window.innerHeight + 20;
+  });
+  if(particles.length > 0) requestAnimationFrame(animateConfetti);
+  else cctx.clearRect(0,0,cnv.width,cnv.height);
+}
+
+function toast(msg){
+  const t = document.getElementById('toast');
+  document.getElementById('toastMsg').textContent = msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 3200);
+}
+
+// ============ GAMES ============
+const GAMES = [
+  { id:'bingo', icon:'🎯', title:'Car Bingo', sub:'5×5 spot card · win confetti'},
+  { id:'wildlife', icon:'📸', title:'Wildlife Spotter', sub:'24 species · real photos · stamp when seen'},
+  { id:'plates', icon:'🚗', title:'License Plates', sub:'All 50 states · tap when you spot one'},
+  { id:'quiz', icon:'🧠', title:'Geology Quiz', sub:'12 questions · score & feedback'},
+  { id:'math', icon:'🛣', title:'Mile Math', sub:'Truck drives toward Paradise as you answer'},
+  { id:'sky', icon:'✨', title:'Sky Tonight', sub:'6 constellations · drag-tap stars'}
+];
+
+function mountGames(){
+  const t = document.getElementById('gametabs');
+  if(!t){ console.warn('gametabs missing'); return; }
+  t.innerHTML = '';
+  GAMES.forEach((g,i) => {
+    const el = document.createElement('div');
+    el.className = 'game-card' + (i===0?' active':'');
+    el.dataset.game = g.id;
+    el.innerHTML = `<span class="gi">${g.icon}</span><h4>${g.title}</h4><p>${g.sub}</p>`;
+    el.addEventListener('click', () => {
+      sfxTap();
+      document.querySelectorAll('.game-card').forEach(x=>x.classList.remove('active'));
+      el.classList.add('active');
+      renderGame(g.id);
+    });
+    t.appendChild(el);
+  });
+  renderGame('bingo');
+}
+// Mount immediately, and retry on DOMContentLoaded as a safety net
+try { mountGames(); } catch(e){ console.error('mountGames first try failed', e); }
+if(document.readyState === 'loading'){
+  document.addEventListener('DOMContentLoaded', () => { try { mountGames(); } catch(e){ console.error(e); } });
+}
+
+function gameStage(){ return document.getElementById('gamestage'); }
+function gameHead(title, sub, statsHtml){
+  return `
+    <button class="sound-toggle" onclick="window.SOUND_ON=!window.SOUND_ON;LS.setItem('soundOn',window.SOUND_ON);this.textContent=window.SOUND_ON?'🔊':'🔇'" title="Sound">${window.SOUND_ON?'🔊':'🔇'}</button>
+    <h3 class="gs-title">${title}</h3>
+    <p class="gs-sub">${sub}</p>
+    ${statsHtml ? `<div class="gs-stats">${statsHtml}</div>` : ''}
+  `;
+}
+
+function renderGame(id){
+  if(id==='bingo') return renderBingo();
+  if(id==='wildlife') return renderWildlife();
+  if(id==='plates') return renderPlates();
+  if(id==='quiz') return renderQuiz();
+  if(id==='math') return renderMath();
+  if(id==='sky') return renderSky();
+}
+
+// CAR BINGO
+function renderBingo(){
+  let card = JSON.parse(LS.getItem('bingoCard')||'null');
+  if(!card || !Array.isArray(card) || card.length !== 25){ newBingoCard(); card = JSON.parse(LS.getItem('bingoCard')); }
+  const spots = JSON.parse(LS.getItem('bingoSpot')||'[]');
+  const isWin = checkBingoWin(card, spots);
+  const got = spots.length + 1; // +1 for FREE
+  gameStage().innerHTML = `
+    ${gameHead('Car Bingo','Tap any square when you spot it. Five in a row = BINGO 🎉',
+      `<div class="gs-stat">Spotted<b>${got}/25</b></div>
+       <div class="gs-stat">Status<b>${isWin?'BINGO! 🏆':'Looking...'}</b></div>`)}
+    ${isWin ? `<div class="bingo-banner">🏆 BINGO! 🏆</div>` : ''}
+    <div class="bingo-card">
+      ${card.map((cell,i)=>{
+        const free = cell==='FREE';
+        const on = spots.includes(i) || free;
+        const winCls = isWin && on ? 'win' : '';
+        return `<div class="bingo-cell ${on?'spotted':''} ${free?'free':''} ${winCls}" data-i="${i}">${cell}</div>`;
+      }).join('')}
+    </div>
+    <div class="btn-row" style="justify-content:center;margin-top:1.5rem">
+      <button class="btn" onclick="newBingoCard();renderBingo()">New Card</button>
+    </div>
+  `;
+  gameStage().querySelectorAll('.bingo-cell').forEach(c => {
+    c.addEventListener('click', () => {
+      if(c.classList.contains('free')) return;
+      sfxTap();
+      const i = parseInt(c.dataset.i);
+      let sp = JSON.parse(LS.getItem('bingoSpot')||'[]');
+      const wasOn = sp.includes(i);
+      if(wasOn) sp = sp.filter(x=>x!==i); else sp.push(i);
+      LS.setItem('bingoSpot', JSON.stringify(sp));
+      const newCard = JSON.parse(LS.getItem('bingoCard'));
+      const nowWin = checkBingoWin(newCard, sp);
+      const wasWin = checkBingoWin(newCard, wasOn ? [...sp, i] : sp.filter(x=>x!==i));
+      renderBingo();
+      if(nowWin && !wasWin){
+        confetti(140);
+        sfxBig();
+        toast('BINGO! Card complete.');
+      } else if(!wasOn){
+        sfxOK();
+      }
+    });
+  });
+}
+function newBingoCard(){
+  const shuffled = [...BINGO_POOL].sort(()=>Math.random()-0.5).slice(0,24);
+  const card = [...shuffled];
+  card.splice(12,0,'FREE');
+  LS.setItem('bingoCard', JSON.stringify(card));
+  LS.setItem('bingoSpot', '[]');
+}
+function checkBingoWin(card, spots){
+  if(!card) return false;
+  const isOn = i => spots.includes(i) || card[i]==='FREE';
+  for(let r=0;r<5;r++) if([0,1,2,3,4].every(c=>isOn(r*5+c))) return true;
+  for(let c=0;c<5;c++) if([0,1,2,3,4].every(r=>isOn(r*5+c))) return true;
+  if([0,6,12,18,24].every(isOn)) return true;
+  if([4,8,12,16,20].every(isOn)) return true;
+  return false;
+}
+
+// WILDLIFE SPOTTER (with real photos)
+function renderWildlife(){
+  const seen = JSON.parse(LS.getItem('wildSeen')||'[]');
+  const pct = Math.round(seen.length / WILDLIFE.length * 100);
+  gameStage().innerHTML = `
+    ${gameHead('Wildlife Spotter','Tap a card the moment you see one in the wild. Photos turn from gray to color.',
+      `<div class="gs-stat">Spotted<b>${seen.length}/${WILDLIFE.length}</b></div>
+       <div class="gs-stat">Progress<b>${pct}%</b></div>
+       <div class="gs-stat">Rank<b>${pct>=80?'MASTER TRACKER':pct>=50?'FIELD NATURALIST':pct>=25?'APPRENTICE':'GREENHORN'}</b></div>`)}
+    <div class="wild-grid">
+      ${WILDLIFE.map((w,i)=>`
+        <div class="wild-card ${seen.includes(i)?'seen':''}" data-i="${i}">
+          <div class="wild-photo" style="background-image:url('${w.p}')"></div>
+          <div class="wn">${w.n}</div>
+          <div class="wl">${w.l}</div>
+          <div class="wl" style="color:var(--ember);margin-top:.2rem">${w.d}</div>
+        </div>`).join('')}
+    </div>
+    <div class="btn-row" style="justify-content:center;margin-top:1.5rem">
+      <button class="btn sm red" onclick="if(confirm('Reset wildlife log?')){LS.removeItem('wildSeen');renderWildlife()}">Reset</button>
+    </div>
+  `;
+  gameStage().querySelectorAll('.wild-card').forEach(c => {
+    c.addEventListener('click', () => {
+      sfxOK();
+      let sn = JSON.parse(LS.getItem('wildSeen')||'[]');
+      const i = parseInt(c.dataset.i);
+      const newSpot = !sn.includes(i);
+      if(sn.includes(i)) sn = sn.filter(x=>x!==i); else sn.push(i);
+      LS.setItem('wildSeen', JSON.stringify(sn));
+      if(newSpot){
+        confetti(40);
+        toast('Spotted: ' + WILDLIFE[i].n);
+        if(sn.length === WILDLIFE.length){ sfxBig(); confetti(200); toast('MASTER TRACKER · 24/24'); }
+        else if(sn.length === 12){ toast('Halfway · 12/24'); }
+      }
+      renderWildlife();
+    });
+  });
+}
+
+// LICENSE PLATES
+function renderPlates(){
+  const got = JSON.parse(LS.getItem('platesGot')||'[]');
+  gameStage().innerHTML = `
+    ${gameHead('License Plates · 50 States','Tap a state the moment you see its license plate. All 50 = champion.',
+      `<div class="gs-stat">Collected<b>${got.length}/50</b></div>
+       <div class="gs-stat">Plus DC<b>${got.includes('DC')?'YES':'no'}</b></div>`)}
+    <div class="lp-grid">
+      ${STATES.map(s=>`<div class="lp ${got.includes(s)?'got':''}" data-s="${s}">${s}</div>`).join('')}
+    </div>
+    <div class="btn-row" style="justify-content:center;margin-top:1.5rem">
+      <button class="btn sm red" onclick="if(confirm('Reset plates?')){LS.removeItem('platesGot');renderPlates()}">Reset</button>
+    </div>
+  `;
+  gameStage().querySelectorAll('.lp').forEach(c => {
+    c.addEventListener('click', () => {
+      sfxTap();
+      let g = JSON.parse(LS.getItem('platesGot')||'[]');
+      const s = c.dataset.s;
+      const newOne = !g.includes(s);
+      if(g.includes(s)) g = g.filter(x=>x!==s); else g.push(s);
+      LS.setItem('platesGot', JSON.stringify(g));
+      if(newOne){
+        confetti(20);
+        if(g.length === 50){ sfxBig(); confetti(250); toast('50 STATES! Champion.'); }
+        else if(g.length === 25) toast('Halfway · 25 states');
+      }
+      renderPlates();
+    });
+  });
+}
+
+// QUIZ
+function renderQuiz(){
+  const idx = parseInt(LS.getItem('quizIdx')||'0');
+  const score = parseInt(LS.getItem('quizScore')||'0');
+  if(idx >= QUIZ.length){
+    const rank = score === QUIZ.length ? 'PERFECT — Master Geologist' :
+                 score >= 10 ? 'Senior Geologist' :
+                 score >= 7 ? 'Field Geologist' : 'Apprentice — try again';
+    gameStage().innerHTML = `
+      ${gameHead('Geology Quiz · Complete','Read the feedback. Try again to lock in the answers.',
+        `<div class="gs-stat">Score<b>${score}/${QUIZ.length}</b></div>
+         <div class="gs-stat">Rank<b>${rank}</b></div>`)}
+      <div class="quiz-fb" style="font-size:1.1rem;padding:1.5rem">${score===QUIZ.length?'You earned dessert.':'Reset and run it again — the answers come faster the second time.'}</div>
+      <button class="btn" style="margin-top:1.2rem" onclick="LS.removeItem('quizIdx');LS.removeItem('quizScore');renderQuiz()">Start Over</button>
+    `;
+    if(score === QUIZ.length){ confetti(180); sfxBig(); }
+    return;
+  }
+  const q = QUIZ[idx];
+  const letters = ['A','B','C','D'];
+  gameStage().innerHTML = `
+    ${gameHead('Geology Quiz','Pick one. Get the feedback after.',
+      `<div class="gs-stat">Question<b>${idx+1}/${QUIZ.length}</b></div>
+       <div class="gs-stat">Score<b>${score}</b></div>`)}
+    <div class="quiz-q" data-num="${String(idx+1).padStart(2,'0')}">
+      <h5>${q.q}</h5>
+      <div class="quiz-opts" id="qopts">
+        ${q.opts.map((o,i)=>`<button class="qopt" data-i="${i}" data-l="${letters[i]}">${o}</button>`).join('')}
+      </div>
+      <div class="quiz-fb" id="qfb" style="display:none"></div>
+    </div>
+  `;
+  gameStage().querySelectorAll('.qopt').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const i = parseInt(btn.dataset.i);
+      const correct = i === q.correct;
+      gameStage().querySelectorAll('.qopt').forEach((b,bi) => {
+        b.classList.add('dis');
+        if(bi === q.correct) b.classList.add('correct');
+        else if(bi === i) b.classList.add('wrong');
+      });
+      const fb = gameStage().querySelector('#qfb');
+      fb.style.display = 'block';
+      fb.innerHTML = (correct ? '✓ Correct. ' : '✗ ') + q.fb;
+      if(correct){ LS.setItem('quizScore', score+1); sfxOK(); confetti(30); }
+      else { sfxFail(); }
+      setTimeout(() => {
+        LS.setItem('quizIdx', idx+1);
+        renderQuiz();
+      }, 3500);
+    });
+  });
+}
+
+// MILE MATH
+function renderMath(){
+  const score = parseInt(LS.getItem('mmScore')||'0');
+  const round = parseInt(LS.getItem('mmRound')||'0');
+  const goal = 21;
+  const won = score >= goal;
+  function genQ(){
+    const types = [
+      () => { const mi = 50+Math.floor(Math.random()*200); const hr = 2+Math.floor(Math.random()*3); return { q:`If we drove <b>${mi} miles</b> in <b>${hr} hours</b>, what was our average speed (mph)?`, a:Math.round(mi/hr) }; },
+      () => { const mi = 100+Math.floor(Math.random()*250); const mph = 60+Math.floor(Math.random()*15); return { q:`We have <b>${mi} miles</b> left at <b>${mph} mph</b>. How many hours until we arrive? (round)`, a:Math.round(mi/mph) }; },
+      () => { const mi = 100+Math.floor(Math.random()*300); const mpg = 20+Math.floor(Math.random()*6); return { q:`If we drive <b>${mi} miles</b> at <b>${mpg} mpg</b>, how many gallons of gas? (round)`, a:Math.round(mi/mpg) }; },
+      () => { const ft = (3+Math.floor(Math.random()*5))*1000; return { q:`If 80°F at the trailhead and we climb <b>${ft} ft</b>, what's the temp at top? (3.5°F drop per 1000 ft)`, a:Math.round(80 - (ft/1000)*3.5) }; },
+      () => { const yr = (10+Math.floor(Math.random()*40))*10; return { q:`Badlands erode 1 inch/year. In <b>${yr} years</b>, how many feet erode? (12 in = 1 ft)`, a:Math.round(yr/12*10)/10, isDecimal:true }; }
+    ];
+    return types[Math.floor(Math.random()*types.length)]();
+  }
+  let q = JSON.parse(LS.getItem('mmQ')||'null');
+  if(!q || q.used){ q = genQ(); q.used = false; LS.setItem('mmQ', JSON.stringify(q)); }
+  const progress = Math.min(100, (score/goal)*100);
+  gameStage().innerHTML = `
+    ${gameHead('Mile Math','Each correct answer drives the truck closer to Paradise. 21 right = arrived.',
+      `<div class="gs-stat">Score<b>${score}/${goal}</b></div>
+       <div class="gs-stat">Round<b>${round+1}</b></div>
+       <div class="gs-stat">Status<b>${won?'ARRIVED 🏔':'EN ROUTE'}</b></div>`)}
+    <div class="mm-truck" style="--tx:${(progress*0.7)}%">🚐</div>
+    <div class="mm-road" style="--prog:${progress}%"><span class="mm-flag">🏁</span></div>
+    ${won ? `<div class="bingo-banner">🏔 PARADISE REACHED 🏔</div><div style="text-align:center;color:var(--cream);font-style:italic">Reset to play again.</div><button class="btn" style="margin:1rem auto 0;display:block" onclick="LS.removeItem('mmScore');LS.removeItem('mmRound');renderMath()">Reset</button>` : `
+    <div class="mm-stage">
+      <div class="mm-q">${q.q}</div>
+      <input class="mm-input" id="mmInput" type="number" step="${q.isDecimal?'0.1':'1'}" placeholder="?" inputmode="decimal"/>
+      <div class="btn-row" style="justify-content:center;margin-top:1rem"><button class="btn" onclick="mmAnswer()">Lock it in</button></div>
+      <div class="mm-fb" id="mmFb"></div>
+    </div>`}
+  `;
+  if(!won) setTimeout(()=>document.getElementById('mmInput').focus(), 100);
+  if(!won) document.getElementById('mmInput').addEventListener('keypress', e => { if(e.key === 'Enter') window.mmAnswer(); });
+}
+window.mmAnswer = function(){
+  const q = JSON.parse(LS.getItem('mmQ'));
+  const val = parseFloat(document.getElementById('mmInput').value);
+  const fb = document.getElementById('mmFb');
+  if(isNaN(val)){ fb.className='mm-fb wrong'; fb.textContent='Enter a number.'; sfxFail(); return; }
+  const tol = q.isDecimal ? 0.2 : 1;
+  const ok = Math.abs(val - q.a) <= tol;
+  fb.className = 'mm-fb ' + (ok ? 'right' : 'wrong');
+  fb.textContent = ok ? `✓ Yes — ${q.a}` : `✗ ${q.a}`;
+  let score = parseInt(LS.getItem('mmScore')||'0');
+  let round = parseInt(LS.getItem('mmRound')||'0');
+  if(ok){ score++; sfxOK(); confetti(35); } else { sfxFail(); }
+  round++;
+  LS.setItem('mmScore', score);
+  LS.setItem('mmRound', round);
+  q.used = true; LS.setItem('mmQ', JSON.stringify(q));
+  setTimeout(() => {
+    if(score >= 21 && ok){ confetti(220); sfxBig(); toast('Reached Paradise · 21/21'); }
+    renderMath();
+  }, 2200);
+};
+
+// SKY
+function renderSky(){
+  const names = Object.keys(CONSTELLATIONS);
+  const cur = LS.getItem('skyCur') || names[0];
+  const data = CONSTELLATIONS[cur];
+  const stars = data.stars.map((s,i)=>{
+    const sz = i===0 ? 6 : 3 + Math.random()*2;
+    const dur = (1.5 + Math.random()*2.5).toFixed(1) + 's';
+    return `<div class="cstar" style="width:${sz}px;height:${sz}px;left:${s[0]}%;top:${s[1]}%;--p:${dur}"></div>`;
+  }).join('');
+  const lines = data.lines.map(L => {
+    const a = data.stars[L[0]], b = data.stars[L[1]];
+    const dx = b[0]-a[0], dy = b[1]-a[1];
+    const len = Math.sqrt(dx*dx + dy*dy);
+    const ang = Math.atan2(dy, dx) * 180 / Math.PI;
+    return `<div class="cline" style="left:${a[0]}%;top:${a[1]}%;width:${len}%;transform:rotate(${ang}deg)"></div>`;
+  }).join('');
+  // background stars for ambiance
+  let bgstars = '';
+  for(let i=0;i<60;i++){
+    bgstars += `<div class="cstar" style="width:${Math.random()*1.5+0.5}px;height:${Math.random()*1.5+0.5}px;left:${Math.random()*100}%;top:${Math.random()*100}%;--p:${(2+Math.random()*3).toFixed(1)}s;opacity:.5"></div>`;
+  }
+  gameStage().innerHTML = `
+    ${gameHead('Sky Tonight','Summer Northern Hemisphere · best after 10pm in full dark · check the fact panel below',
+      `<div class="gs-stat">Constellation<b>${cur}</b></div>
+       <div class="gs-stat">Tap to switch<b>${names.length} ready</b></div>`)}
+    <div class="btn-row" style="margin-bottom:1rem">
+      ${names.map(n => `<button class="btn sm" onclick="sfxTap();LS.setItem('skyCur','${n}');renderSky()" style="${n===cur?'background:var(--gold);color:var(--void);border-color:var(--gold)':''}">${n}</button>`).join('')}
+    </div>
+    <div class="sky">
+      ${bgstars}
+      ${lines}
+      ${stars}
+      <div class="cname" style="left:50%;top:5%;transform:translateX(-50%)">${cur}</div>
+    </div>
+    <div class="const-fact">${data.fact}</div>
+  `;
+}
+
+// ============ SCHOOL ============
+(function(){
+  const w = document.getElementById('school-grid');
+  SCHOOL.forEach(s => {
+    const el = document.createElement('div');
+    el.style.cssText = 'background:linear-gradient(180deg,#0f1418,#0a0d10);border:1px solid #1a2018;padding:1.5rem;border-radius:4px';
+    el.innerHTML = `
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;letter-spacing:.3em;color:var(--gold);text-transform:uppercase;margin-bottom:.6rem">${s.tag}</div>
+      <h4 style="font-family:'Playfair Display',serif;font-size:1.3rem;color:var(--cream);font-weight:400;margin-bottom:.8rem">${s.name}</h4>
+      <p style="font-size:.86rem;color:var(--fog);line-height:1.6;margin-bottom:1rem">${s.text}</p>
+      <div class="hwork">${s.hw}</div>
+    `;
+    w.appendChild(el);
+  });
+})();
+
+// ============ FIELD JOURNAL ============
+(function(){
+  const box = document.getElementById('journal-box');
+  function render(){
+    const entries = JSON.parse(LS.getItem('journal')||'[]');
+    box.innerHTML = `
+      <div class="j-form">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:.7rem">
+          <div>
+            <label>Who's writing</label>
+            <select id="j-who">
+              <option>Wren</option><option>Kid 2</option><option>Kid 3</option><option>Teen</option>
+              <option>Mom · Jen</option><option>Dad</option><option>Adult 3</option>
+            </select>
+          </div>
+          <div>
+            <label>Where are you</label>
+            <input type="text" id="j-where" placeholder="e.g., Sage Creek · Badlands"/>
+          </div>
+        </div>
+        <label>What did you see today?</label>
+        <textarea id="j-text" placeholder="One sentence is enough. One paragraph is better."></textarea>
+        <button class="btn" onclick="addJournal()">Save Entry</button>
+      </div>
+      <div>
+        ${entries.length === 0 ? '<p style="color:var(--ash);font-style:italic;font-family:Playfair Display,serif;font-size:1rem">No entries yet. The first one matters most.</p>' :
+        entries.slice().reverse().map((e,idx) => `
+          <div class="j-entry">
+            <div class="j-meta">
+              <span><span class="j-by">${e.who}</span> · ${new Date(e.date).toLocaleString()}</span>
+              <button class="j-del" onclick="delJournal(${entries.length-1-idx})">delete</button>
+            </div>
+            <div class="j-text">${e.text}</div>
+            ${e.where ? '<div class="j-loc">📍 ' + e.where + '</div>' : ''}
+          </div>`).join('')}
+      </div>
+      ${entries.length > 0 ? `<div style="margin-top:1rem;text-align:right"><button class="btn sm" onclick="exportJournal()">Export as text</button></div>` : ''}
+    `;
+  }
+  window.addJournal = function(){
+    const text = document.getElementById('j-text').value.trim();
+    if(!text){ alert('Write something first.'); return; }
+    const entries = JSON.parse(LS.getItem('journal')||'[]');
+    entries.push({
+      who: document.getElementById('j-who').value,
+      where: document.getElementById('j-where').value,
+      text, date: new Date().toISOString()
+    });
+    LS.setItem('journal', JSON.stringify(entries));
+    sfxOK(); confetti(40); toast('Entry saved');
+    render();
+  };
+  window.delJournal = function(i){
+    if(!confirm('Delete this entry?')) return;
+    const entries = JSON.parse(LS.getItem('journal')||'[]');
+    entries.splice(i,1);
+    LS.setItem('journal', JSON.stringify(entries));
+    render();
+  };
+  window.exportJournal = function(){
+    const entries = JSON.parse(LS.getItem('journal')||'[]');
+    let txt = 'EXPEDITION FIELD JOURNAL · Erwin → Paradise · 2026\n' + '='.repeat(60) + '\n\n';
+    entries.forEach(e => {
+      txt += `[${new Date(e.date).toLocaleString()}] ${e.who}${e.where ? ' · ' + e.where : ''}\n${e.text}\n\n`;
+    });
+    const blob = new Blob([txt], {type:'text/plain'});
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'expedition-journal.txt';
+    a.click();
+  };
+  render();
+})();
+
+// ============ WILDLIFE GALLERY ============
+(function(){
+  const w = document.getElementById('gallery');
+  WILDLIFE.slice(0,12).forEach(wl => {
+    const el = document.createElement('div');
+    el.className = 'gphoto';
+    el.style.backgroundImage = `url('${wl.p}')`;
+    el.innerHTML = `<div class="gphoto-cap"><small>${wl.l}</small>${wl.n}</div>`;
+    w.appendChild(el);
+  });
+})();
+
+// ============ BUDGET ============
+function renderExpenses(){
+  const list = JSON.parse(LS.getItem('expedExpenses')||'[]');
+  const total = list.reduce((s,e)=>s+e.amt, 0);
+  const target = parseFloat(LS.getItem('btTarget')||'3700');
+  document.getElementById('bt-total').textContent = '$'+total.toFixed(2);
+  const pct = Math.min(100, (total/target)*100);
+  document.getElementById('bt-bar').style.width = pct + '%';
+  const remain = target - total;
+  document.getElementById('bt-remain').textContent = remain >= 0 ? `$${remain.toFixed(2)} remaining` : `$${Math.abs(remain).toFixed(2)} over budget`;
+  document.getElementById('bt-remain').style.color = remain >= 0 ? 'var(--fog)' : 'var(--danger)';
+  document.getElementById('bt-list').innerHTML = list.slice().reverse().map((e,idx) => `
+    <div class="bt-item">
+      <div><b>${e.desc}</b><br/><span class="bt-cat">${e.cat}</span></div>
+      <div class="bt-amt">$${e.amt.toFixed(2)}</div>
+      <div class="bt-dt">${e.dt}</div>
+      <button class="j-del" onclick="delExpense(${list.length-1-idx})">×</button>
+    </div>`).join('');
+}
+window.addExpense = function(){
+  const desc = document.getElementById('bt-desc').value.trim();
+  const amt = parseFloat(document.getElementById('bt-amt').value);
+  if(!desc || isNaN(amt)){ alert('Need description and amount.'); return; }
+  const list = JSON.parse(LS.getItem('expedExpenses')||'[]');
+  list.push({ desc, amt, cat: document.getElementById('bt-cat').value, dt: new Date().toLocaleDateString('en-US',{month:'short',day:'numeric'}) });
+  LS.setItem('expedExpenses', JSON.stringify(list));
+  document.getElementById('bt-desc').value = '';
+  document.getElementById('bt-amt').value = '';
+  renderExpenses();
+};
+window.delExpense = function(i){
+  const list = JSON.parse(LS.getItem('expedExpenses')||'[]');
+  list.splice(i,1);
+  LS.setItem('expedExpenses', JSON.stringify(list));
+  renderExpenses();
+};
+document.getElementById('bt-target').addEventListener('change', e => {
+  LS.setItem('btTarget', e.target.value);
+  renderExpenses();
+});
+{ const saved = LS.getItem('btTarget'); if(saved) document.getElementById('bt-target').value = saved; }
+renderExpenses();
+
+// ============ RECIPES ============
+(function(){
+  const w = document.getElementById('recipes');
+  RECIPES.forEach(r => {
+    const el = document.createElement('div');
+    el.className='recipe';
+    el.innerHTML = `<h4>${r.title}</h4><div class="when">${r.when} · ${r.when2}</div>
+      <ul>${r.items.map(i=>'<li>· '+i+'</li>').join('')}</ul>
+      <div class="method">${r.method}</div>`;
+    w.appendChild(el);
+  });
+})();
+
+// ============ PACKING ============
+(function(){
+  const wrap = document.getElementById('packing');
+  const saved = JSON.parse(LS.getItem('packing')||'{}');
+  Object.keys(PACKING).forEach(cat => {
+    const el = document.createElement('div');
+    el.className = 'pack-cat';
+    el.innerHTML = `<h4>${cat}</h4>` + PACKING[cat].map(item => {
+      const key = (cat + '|' + item).replace(/<[^>]*>/g,'');
+      const done = !!saved[key];
+      return `<label class="pack-item ${done?'done':''}"><input type="checkbox" ${done?'checked':''} data-k="${key}"/><span>${item}</span></label>`;
+    }).join('');
+    wrap.appendChild(el);
+  });
+  function updateProg(){
+    let total = 0, done = 0;
+    document.querySelectorAll('.pack-item input').forEach(i => { total++; if(i.checked) done++; });
+    document.getElementById('pack-pct').textContent = `${done} / ${total} packed · ${Math.round(done/total*100)}%`;
+  }
+  document.querySelectorAll('.pack-item input').forEach(input => {
+    input.addEventListener('change', () => {
+      const s = JSON.parse(LS.getItem('packing')||'{}');
+      s[input.dataset.k] = input.checked;
+      LS.setItem('packing', JSON.stringify(s));
+      input.closest('.pack-item').classList.toggle('done', input.checked);
+      updateProg();
+    });
+  });
+  updateProg();
+})();
+
+// ============ SAFETY ============
+(function(){
+  const w = document.getElementById('safety');
+  SAFETY.forEach(s => {
+    const el = document.createElement('div');
+    el.className = `safe-card ${s.cat}`;
+    el.innerHTML = `<h4 data-icon="${s.icon}">${s.title}</h4><ul>${s.items.map(i=>'<li>'+i+'</li>').join('')}</ul>`;
+    w.appendChild(el);
+  });
+})();
+
+// ============ DASHBOARDS ============
+(function(){
+  const w = document.getElementById('dashboard');
+  if(!w) return;
+  DASHBOARDS.forEach(d => {
+    const a = document.createElement('a');
+    a.href = d.url; a.target = '_blank';
+    a.innerHTML = `<span class="dt">${d.tag}</span><span class="dn">${d.name} ↗</span>`;
+    w.appendChild(a);
+  });
+})();
+
+// ============ CAREER / CONTENT CAL ============
+(function(){
+  const w = document.getElementById('content-cal');
+  if(!w) return;
+  CONTENT_CAL.forEach((c,i) => {
+    const el = document.createElement('div');
+    el.style.cssText = 'background:linear-gradient(180deg,#0f1418,#0a0d10);border:1px solid #1a2018;border-left:3px solid var(--gold);padding:1.2rem;border-radius:4px';
+    el.innerHTML = `
+      <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:.5rem">
+        <span style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--gold);letter-spacing:.25em;text-transform:uppercase">${c.day}</span>
+        <span style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--ember);letter-spacing:.1em">${String(i+1).padStart(2,'0')}/21</span>
+      </div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--fog);letter-spacing:.1em;margin-bottom:.7rem">${c.loc}</div>
+      <div style="font-family:'Playfair Display',serif;font-style:italic;color:var(--cream);font-size:1rem;line-height:1.4;margin-bottom:.6rem">${c.hook}</div>
+      <p style="color:var(--fog);font-size:.78rem;line-height:1.5;margin-bottom:.6rem">${c.insight}</p>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--amber);letter-spacing:.1em">${c.tags}</div>
+    `;
+    w.appendChild(el);
+  });
+})();
+
+// ============ NETWORK NODES ============
+(function(){
+  const w = document.getElementById('netnodes');
+  if(!w) return;
+  NETNODES.forEach(d => {
+    const a = document.createElement('a');
+    a.href = d.url; a.target = '_blank';
+    a.innerHTML = `<span class="dt">${d.tag}</span><span class="dn">${d.name} ↗</span>`;
+    w.appendChild(a);
+  });
+})();
+
+// ============ MUSIC ============
+(function(){
+  const w = document.getElementById('music');
+  if(!w) return;
+  MUSIC.forEach(m => {
+    const el = document.createElement('div');
+    el.style.cssText = 'background:linear-gradient(180deg,#0f1418,#0a0d10);border:1px solid #1a2018;border-left:3px solid var(--amber);padding:1.2rem;border-radius:4px';
+    el.innerHTML = `
+      <h5 style="font-family:'Playfair Display',serif;color:var(--gold);font-size:1.05rem;font-weight:400;margin-bottom:.6rem">${m.title}</h5>
+      <p style="color:var(--cream);font-size:.82rem;line-height:1.55">${m.text}</p>
+    `;
+    w.appendChild(el);
+  });
+})();
+</script>
+</body>
+</html>
