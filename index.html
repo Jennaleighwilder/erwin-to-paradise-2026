@@ -720,8 +720,8 @@ footer .sig{font-family:'Playfair Display',serif;font-style:italic;color:var(--g
 
   <div class="divider" style="height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:4rem 0"></div>
 
-  <h3 style="font-family:'Playfair Display',serif;font-size:1.5rem;color:var(--gold);margin:1rem 0 1rem;font-weight:400">Own your soundtrack · AI music for the road</h3>
-  <p style="color:var(--fog);font-size:.9rem;margin-bottom:1.5rem;font-style:italic;font-family:'Playfair Display',serif">Suno and Udio generate full songs from a text prompt. Output is yours to use commercially under their paid tiers. Make a 21-track playlist seeded by each day of the trip — you own the masters, can license them out later, and the kids will literally be singing songs about the road they're on.</p>
+  <h3 style="font-family:'Playfair Display',serif;font-size:1.5rem;color:var(--gold);margin:1rem 0 1rem;font-weight:400">Road playlist · prompts for Mureka</h3>
+  <p style="color:var(--fog);font-size:.9rem;margin-bottom:1.5rem;font-style:italic;font-family:'Playfair Display',serif">One track per day. Drop each prompt into Mureka the night before — by morning you've got a song the kids can sing along to about the exact place they're driving toward.</p>
   <div id="music" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1rem;margin-bottom:2rem"></div>
 
   <div class="divider" style="height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:4rem 0"></div>
@@ -1205,14 +1205,22 @@ const NETNODES = [
 ];
 
 const MUSIC = [
-  { title:'Suno · the easy entry', text:'<a href="https://suno.com" target="_blank">suno.com</a> · Pro tier $10/mo unlocks commercial use & you own the masters. Use the "Custom" tab — paste lyrics + genre tags. Try: "Appalachian banjo · folk · road trip · upbeat · 2 minutes."'},
-  { title:'Udio · higher fidelity', text:'<a href="https://www.udio.com" target="_blank">udio.com</a> · Standard tier ~$10/mo for commercial rights. Better at extending tracks past the 2-min mark. Good for longer drive tunes.'},
-  { title:'Track 1 · "Erwin to Wherever"', text:'Genre: Americana, banjo, slide guitar, female vocal · 100 BPM · sunny departure energy · refrain: "the road is older than the map."'},
-  { title:'Track 5 · "Sage Creek Stars"', text:'Genre: ambient folk, soft strings, no drums · 70 BPM · for a kid asleep in the back at midnight · refrain: "the buffalo are sleeping too."'},
-  { title:'Track 7 · "Sacred Stone at Sunset"', text:'Genre: cinematic Americana, big drums coming in halfway, harmonized vocals · 90 BPM · about Devils Tower at dusk · sacred + electric.'},
-  { title:'Track 10 · "Top of the World" (Beartooth)', text:'Genre: orchestral folk, strings, building crescendo · 80 BPM · the climb to 10,947 ft · refrain: "everything below is small."'},
-  { title:'Track 14 · "Made It to Paradise"', text:'Genre: warm country, sparse guitar, family harmonies · 95 BPM · arrival anthem · could literally play this when you pull into town July 11.'},
-  { title:'Ownership note', text:'Both Suno (Pro) and Udio (Standard) grant the user full commercial rights to outputs. Save the song file AND your prompt — your prompt is part of the IP trail. License the tracks on AudioJungle or Pond5 later for passive income.'}
+  { title:'Day 1 · "Erwin to Wherever"', text:'Americana · banjo, slide guitar, female lead vocal · 100 BPM · sunny departure energy · refrain: <em>"the road is older than the map."</em>'},
+  { title:'Day 2 · "Hoodoos in the Cornfield"', text:'Indie folk · acoustic guitar, light tambourine · 95 BPM · curious and surprised · about ancient stone hidden in flat farmland.'},
+  { title:'Day 3 · "Mississippi Crossing"', text:'Bluegrass · fast picking, fiddle, harmonica · 120 BPM · the long-haul push-day energy · big sky opening up after Missouri.'},
+  { title:'Day 4 · "Sage Creek Stars"', text:'Ambient folk · soft strings, no drums, dreamy synth pad · 70 BPM · for a kid asleep in the back at midnight · refrain: <em>"the buffalo are sleeping too."</em>'},
+  { title:'Day 5 · "One Inch a Year"', text:'Acoustic country · slow waltz, brushed snare · 75 BPM · meditative · the Badlands eroding under your feet.'},
+  { title:'Day 6 · "Wild Horses, Coal Fires"', text:'Outlaw country · electric guitar, walking bass · 105 BPM · about Theodore Roosevelt — wild horses, burning hills, no crowds.'},
+  { title:'Day 7 · "Sacred Stone at Sunset"', text:'Cinematic Americana · sparse start, big drums halfway, harmonized vocals · 90 BPM · about Devils Tower at dusk · reverent + electric.'},
+  { title:'Day 8 · "Climbing the Bighorns"', text:'Mountain folk · mandolin, gentle drums, ascending melody · 100 BPM · sagebrush turning to tundra in 20 miles.'},
+  { title:'Day 9 · "Medicine Wheel"', text:'Sacred ambient · drone, soft hand drum, female harmony, no English lyrics — wordless vocalizations · 60 BPM · quiet, respectful, ancient.'},
+  { title:'Day 10 · "Top of the World" (Beartooth)', text:'Orchestral folk · strings, building crescendo, alpine wind FX · 80 BPM · the 10,947 ft climb · refrain: <em>"everything below is small."</em>'},
+  { title:'Day 11 · "Lamar Valley Wolves"', text:'Atmospheric country · slide guitar, distant howl, slow build · 85 BPM · about the wolves coming back and the rivers changing course.'},
+  { title:'Day 12 · "North to the Ice"', text:'Folk rock · steady drums, electric guitar, female vocal · 110 BPM · plains-to-mountains energy · the drive into Glacier.'},
+  { title:'Day 13 · "Twenty-Five Glaciers Left"', text:'Soft indie · piano, strings, hushed vocal · 75 BPM · about Grinnell Glacier, the photos from 1910, the kids who\'ll be 20-something in 2050.'},
+  { title:'Day 14 · "Made It to Paradise"', text:'Warm country · sparse guitar, family harmonies, soft pedal steel · 95 BPM · arrival anthem · play this when you pull into town July 11.'},
+  { title:'Paradise rest · "Clark Fork Lullaby"', text:'Sleep folk · acoustic fingerpicking, no percussion, gentle female vocal · 65 BPM · for the recovery nights · river sounds optional.'},
+  { title:'Kids\' track · "Bear Spray Boogie"', text:'Silly country · upbeat, kazoo, hand claps, kid chorus · 130 BPM · the bear-safety song the littles will memorize · use it to drill the protocols.'}
 ];
 
 const DASHBOARDS = [
